@@ -1,0 +1,24 @@
+{
+    "name": "mimic-iv-template-generator",
+    "version": "1.0.0",
+    "description": "transform the MIMIC-IV dataset to FHIR format",
+    "main": "main.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/swarfte/MIMIC-IV-Template-Generator.git"
+    },
+    "author": "Swarfte",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/swarfte/MIMIC-IV-Template-Generator/issues"
+    },
+    "homepage": "https://github.com/swarfte/MIMIC-IV-Template-Generator#readme",
+    "dependencies": {
+        "csv-parser": "^3.0.0",
+        "fs": "^0.0.1-security",
+        "ndjson": "^2.0.0"
+    }
+}
