@@ -8,6 +8,7 @@ class AbstractNode {
     getData() {
         return this.data;
     }
+    parseNode(key, value, record, database) {}
 }
 
 class AbstractFixedNode extends AbstractNode {
@@ -16,6 +17,9 @@ class AbstractFixedNode extends AbstractNode {
         if (this.constructor == AbstractFixedNode) {
             throw new Error("Abstract classes can't be instantiated.");
         }
+    }
+    parseNode(key, value, record, database) {
+        return this.getData();
     }
 }
 
@@ -44,13 +48,37 @@ class BooleanNode extends AbstractFixedNode {
     }
 }
 
-class ArrayNode extends AbstractFixedNode {
+class AbstractStructureNode extends AbstractNode {
+    constructor(data) {
+        super(data);
+        if (this.constructor == AbstractStructureNode) {
+            throw new Error("Abstract classes can't be instantiated.");
+        }
+    }
+    parseNode(key, value, record, database) {
+        let result = null;
+        if (this.data instanceof Array) {
+            result = [];
+            for (const element of this.data) {
+                result.push(element.parseNode(key, value, record, database));
+            }
+        } else if (this.data instanceof Object) {
+            result = {};
+            for (const [key, value] of Object.entries(this.data)) {
+                result[key] = value.parseNode(key, value, record, database);
+            }
+        }
+        return result;
+    }
+}
+
+class ArrayNode extends AbstractStructureNode {
     constructor(data) {
         super(data);
     }
 }
 
-class ObjectNode extends AbstractFixedNode {
+class ObjectNode extends AbstractStructureNode {
     constructor(data) {
         super(data);
     }
@@ -66,7 +94,18 @@ class AbstractDynamicNode extends AbstractNode {
         this.attributes = attributes;
     }
 
-    generateData() {}
+    generateData(record, database) {
+        // the data is generated here
+    }
+
+    getData() {
+        return this.data;
+    }
+
+    parseNode(key, value, record, database) {
+        this.generateData(record, database);
+        return this.getData();
+    }
 }
 
 class BasicNode extends AbstractDynamicNode {
@@ -74,7 +113,7 @@ class BasicNode extends AbstractDynamicNode {
         super(filename, attributes);
     }
 
-    generateData() {}
+    generateData(record, database) {}
 }
 
 class OneToOneNode extends AbstractDynamicNode {
@@ -100,6 +139,7 @@ class OneToManyNode extends AbstractDynamicNode {
 module.exports = {
     AbstractNode,
     AbstractFixedNode,
+    AbstractStructureNode,
     StringNode,
     NumberNode,
     BooleanNode,

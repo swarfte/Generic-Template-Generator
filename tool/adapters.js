@@ -16,7 +16,7 @@ class AbstractAdapter {
 
 class csvAdapter extends AbstractAdapter {
     constructor(filename) {
-        super(filename + ".csv");
+        super(filename);
         this.data = this.transformDate(this.fileName);
     }
 
@@ -47,7 +47,7 @@ class csvAdapter extends AbstractAdapter {
 
 class ndjsonAdapter extends AbstractAdapter {
     constructor(filename) {
-        super(filename + ".ndjson");
+        super(filename);
         this.data = this.transformDate(this.fileName);
     }
 
