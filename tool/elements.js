@@ -113,7 +113,9 @@ class BasicNode extends AbstractDynamicNode {
         super(filename, attributes);
     }
 
-    generateData(record, database) {}
+    generateData(record, database) {
+        this.data = record[this.attributes];
+    }
 }
 
 class OneToOneNode extends AbstractDynamicNode {
@@ -123,7 +125,12 @@ class OneToOneNode extends AbstractDynamicNode {
         this.foreignAttributes = foreignAttributes;
     }
 
-    generateData() {}
+    generateData(record, database) {
+        const foreignRecord = database[this.foreignFileName].find(
+            (element) => element[this.attributes] == record[this.attributes]
+        );
+        this.data = foreignRecord[this.foreignAttributes];
+    }
 }
 
 class OneToManyNode extends AbstractDynamicNode {

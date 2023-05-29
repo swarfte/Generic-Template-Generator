@@ -9,7 +9,7 @@ class Generator {
         this.templatePath = "../template/" + this.originalTemplatePath + ".js";
         this.template = require(this.templatePath)["Template"]; // it is a class
         this.templateConfig = this.template.templateConfig;
-        this.templatePrimaryKey = this.templateConfig.primaryKey;
+        this.templatePrimaryTable = this.templateConfig.primaryTable;
 
         this.database = {};
         this.output = [];
@@ -24,7 +24,7 @@ class Generator {
         const jsonfile = JSON.stringify(this.output, null, 4);
         fs.writeFile(
             "./output/" + this.originalTemplatePath + ".json",
-            JSON.stringify(this.output, null, 4),
+            jsonfile,
             (err) => {
                 if (err) {
                     throw err;
@@ -46,10 +46,10 @@ class Generator {
     generateData() {
         let currentIndex = 0;
         const database = this.database;
-        const primaryKey = this.templatePrimaryKey;
-        const primaryData = database[primaryKey].getData();
+        const primaryTable = this.templatePrimaryTable;
+        const primaryData = database[primaryTable].getData();
         for (const record of primaryData) {
-            if (currentIndex % 1000 == 0) {
+            if (currentIndex % 10000 == 0) {
                 console.log(
                     `current percentage: ${
                         (currentIndex / primaryData.length) * 100
@@ -58,7 +58,7 @@ class Generator {
             }
             const templateInstance = new this.template();
             for (const [key, value] of Object.entries(templateInstance)) {
-                templateInstance[key] = this.parseNode(
+                templateInstance[key] = value.parseNode(
                     key,
                     value,
                     record,
@@ -68,10 +68,6 @@ class Generator {
             this.output.push(templateInstance);
             currentIndex += 1;
         }
-    }
-
-    parseNode(key, value, record, database) {
-        return value.parseNode(key, value, record, database);
     }
 
     run() {
