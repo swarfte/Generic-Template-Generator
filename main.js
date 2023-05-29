@@ -1,4 +1,4 @@
-var Generator = require("./tool/generator.js")["Generator"];
+var jsonGenerator = require("./tool/generator.js")["jsonGenerator"];
 
 const args = process.argv.slice(2)[0];
-const generator = new Generator(args).run();
+const generator = new jsonGenerator(args).run();

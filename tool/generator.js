@@ -1,9 +1,4 @@
-var Nodes = require("../tool/elements.js");
-var AbstractFixedNode = Nodes["AbstractFixedNode"];
-var AbstractDynamicNode = Nodes["AbstractDynamicNode"];
-var AbstractStructureNode = Nodes["AbstractStructureNode"];
-
-class Generator {
+class jsonGenerator {
     constructor(templateName) {
         this.originalTemplatePath = templateName;
         this.templatePath = "../template/" + this.originalTemplatePath + ".js";
@@ -78,5 +73,5 @@ class Generator {
 }
 
 module.exports = {
-    Generator,
+    jsonGenerator,
 };

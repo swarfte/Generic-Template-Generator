@@ -1,3 +1,7 @@
+var fs = require("fs");
+var csv = require("csv-parser");
+var ndjson = require("ndjson");
+
 class AbstractAdapter {
     constructor(filename) {
         if (this.constructor == AbstractAdapter) {
@@ -21,8 +25,6 @@ class csvAdapter extends AbstractAdapter {
     }
 
     transformDate(filename) {
-        const fs = require("fs");
-        const csv = require("csv-parser");
         const results = [];
         const fileData = fs.readFileSync(filename, "utf8");
         csv()
@@ -52,8 +54,6 @@ class ndjsonAdapter extends AbstractAdapter {
     }
 
     transformDate(filename) {
-        const fs = require("fs");
-        const ndjson = require("ndjson");
         const results = [];
         const fileData = fs.readFileSync(filename, "utf8");
         const parser = ndjson.parse();

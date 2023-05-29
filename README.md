@@ -1,1 +1,1 @@
-# MIMIC-IV Template Generator
+# Generic Template Generator

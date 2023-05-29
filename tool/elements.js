@@ -55,32 +55,73 @@ class AbstractStructureNode extends AbstractNode {
             throw new Error("Abstract classes can't be instantiated.");
         }
     }
-    parseNode(key, value, record, database) {
-        let result = null;
-        if (this.data instanceof Array) {
-            result = [];
-            for (const element of this.data) {
-                result.push(element.parseNode(key, value, record, database));
-            }
-        } else if (this.data instanceof Object) {
-            result = {};
-            for (const [key, value] of Object.entries(this.data)) {
-                result[key] = value.parseNode(key, value, record, database);
-            }
-        }
-        return result;
-    }
 }
 
 class ArrayNode extends AbstractStructureNode {
     constructor(data) {
         super(data);
     }
+
+    parseNode(key, value, record, database) {
+        const result = [];
+        for (const element of this.data) {
+            result.push(element.parseNode(key, value, record, database));
+        }
+        return result;
+    }
 }
 
 class ObjectNode extends AbstractStructureNode {
     constructor(data) {
         super(data);
+    }
+    parseNode(key, value, record, database) {
+        const result = {};
+        for (const [key, value] of Object.entries(this.data)) {
+            result[key] = value.parseNode(key, value, record, database);
+        }
+        return result;
+    }
+}
+
+class ConcatenateNode extends AbstractStructureNode {
+    constructor(data) {
+        super(data);
+    }
+    parseNode(key, value, record, database) {
+        const result = [];
+        for (const element of this.data) {
+            result.push(element.parseNode(key, value, record, database));
+        }
+        return result.join("");
+    }
+}
+
+class ArithmeticNode extends AbstractStructureNode {
+    constructor(data, operation) {
+        super(data);
+        this.operation = operation;
+    }
+    parseNode(key, value, record, database) {
+        const calculationSequence = [];
+        for (const element of this.data) {
+            calculationSequence.push(
+                element.parseNode(key, value, record, database)
+            );
+        }
+        return calculationSequence.reduce(this.operation);
+    }
+}
+
+class DecorateNode extends AbstractStructureNode {
+    constructor(data, decorator) {
+        super(data);
+        this.decorator = decorator;
+    }
+    parseNode(key, value, record, database) {
+        return this.decorator(
+            this.data.parseNode(key, value, record, database)
+        );
     }
 }
 
@@ -119,39 +160,144 @@ class BasicNode extends AbstractDynamicNode {
 }
 
 class OneToOneNode extends AbstractDynamicNode {
-    constructor(filename, attributes, foreignFilename, foreignAttributes) {
+    constructor(
+        filename,
+        attributes,
+        foreignFilename,
+        foreignAttributes,
+        sorted = false
+    ) {
         super(filename, attributes);
         this.foreignFileName = foreignFilename;
         this.foreignAttributes = foreignAttributes;
+        this.sorted = sorted;
+    }
+
+    sequentialSearch(record, database) {
+        const foreignKey = record[this.attributes];
+        let foreignRecord = null;
+        for (const element of database[this.foreignFileName].getData()) {
+            if (element[this.attributes] == foreignKey) {
+                foreignRecord = element;
+                break;
+            }
+        }
+        return foreignRecord[this.foreignAttributes];
+    }
+
+    binarySearch(record, database) {
+        const foreignKey = record[this.attributes];
+        const foreignRecords = database[this.foreignFileName].getData();
+        let left = 0;
+        let right = foreignRecords.length - 1;
+        let middle = Math.floor((left + right) / 2);
+        while (left <= right) {
+            if (foreignKey == foreignRecords[middle][this.attributes]) {
+                return foreignRecords[middle][this.foreignAttributes];
+            } else if (foreignKey < foreignRecords[middle][this.attributes]) {
+                right = middle - 1;
+            } else {
+                left = middle + 1;
+            }
+            middle = Math.floor((left + right) / 2);
+        }
+        return null;
     }
 
     generateData(record, database) {
-        const foreignRecord = database[this.foreignFileName].find(
-            (element) => element[this.attributes] == record[this.attributes]
-        );
-        this.data = foreignRecord[this.foreignAttributes];
+        if (this.sorted == false) {
+            this.data = this.sequentialSearch(record, database);
+        } else {
+            this.data = this.binarySearch(record, database);
+        }
     }
 }
 
 class OneToManyNode extends AbstractDynamicNode {
-    constructor(filename, attributes, foreignFilename, foreignAttributes) {
+    constructor(
+        filename,
+        attributes,
+        foreignFilename,
+        foreignAttributes,
+        sorted = false
+    ) {
         super(filename, attributes);
         this.foreignFileName = foreignFilename;
         this.foreignAttributes = foreignAttributes;
     }
 
-    generateData() {}
+    sequentialSearch(record, database) {
+        const foreignKey = record[this.attributes];
+        let foreignRecords = [];
+        for (const element of database[this.foreignFileName].getData()) {
+            if (element[this.attributes] == foreignKey) {
+                foreignRecords.push(element[this.foreignAttributes]);
+            }
+        }
+        return foreignRecords;
+    }
+
+    binarySearch(record, database) {
+        const foreignKey = record[this.attributes];
+        const foreignRecords = database[this.foreignFileName].getData();
+        let left = 0;
+        let right = foreignRecords.length - 1;
+        let middle = Math.floor((left + right) / 2);
+        while (left <= right) {
+            if (foreignKey == foreignRecords[middle][this.attributes]) {
+                let foreignRecordsArray = [];
+                let i = middle;
+                while (
+                    i >= 0 &&
+                    foreignKey == foreignRecords[i][this.attributes]
+                ) {
+                    foreignRecordsArray.push(
+                        foreignRecords[i][this.foreignAttributes]
+                    );
+                    i--;
+                }
+                i = middle + 1;
+                while (
+                    i < foreignRecords.length &&
+                    foreignKey == foreignRecords[i][this.attributes]
+                ) {
+                    foreignRecordsArray.push(
+                        foreignRecords[i][this.foreignAttributes]
+                    );
+                    i++;
+                }
+                return foreignRecordsArray;
+            } else if (foreignKey < foreignRecords[middle][this.attributes]) {
+                right = middle - 1;
+            } else {
+                left = middle + 1;
+            }
+            middle = Math.floor((left + right) / 2);
+        }
+        return null;
+    }
+
+    generateData(record, database) {
+        if (this.sorted == false) {
+            this.data = this.sequentialSearch(record, database);
+        } else {
+            this.data = this.binarySearch(record, database);
+        }
+    }
 }
 
 module.exports = {
     AbstractNode,
     AbstractFixedNode,
-    AbstractStructureNode,
     StringNode,
     NumberNode,
     BooleanNode,
+    AbstractStructureNode,
     ArrayNode,
     ObjectNode,
+    ConcatenateNode,
+    ArithmeticNode,
+    DecorateNode,
     AbstractDynamicNode,
     BasicNode,
     OneToOneNode,
