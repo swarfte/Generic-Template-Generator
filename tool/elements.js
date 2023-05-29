@@ -1,41 +1,96 @@
 class AbstractNode {
-    constructor(fileName, attributes) {
-        // let it be abstract class
+    constructor(data) {
         if (this.constructor == AbstractNode) {
             throw new Error("Abstract classes can't be instantiated.");
         }
-        this.fileName = fileName;
-        this.attributes = attributes;
-        this.data = null;
+        this.data = data;
     }
-
     getData() {
         return this.data;
     }
 }
 
-class BasicNode extends AbstractNode {
-    constructor(fileName, attributes) {
-        super(fileName, attributes);
+class AbstractFixedNode extends AbstractNode {
+    constructor(data) {
+        super(data);
+        if (this.constructor == AbstractFixedNode) {
+            throw new Error("Abstract classes can't be instantiated.");
+        }
+    }
+}
+
+class StringNode extends AbstractFixedNode {
+    constructor(data) {
+        super(data);
+    }
+}
+
+class NumberNode extends AbstractFixedNode {
+    constructor(data) {
+        super(data);
+    }
+
+    getData() {
+        return String(this.data);
+    }
+}
+
+class BooleanNode extends AbstractFixedNode {
+    constructor(data) {
+        super(data);
+    }
+    getData() {
+        return String(this.data);
+    }
+}
+
+class ArrayNode extends AbstractFixedNode {
+    constructor(data) {
+        super(data);
+    }
+}
+
+class ObjectNode extends AbstractFixedNode {
+    constructor(data) {
+        super(data);
+    }
+}
+
+class AbstractDynamicNode extends AbstractNode {
+    constructor(filename, attributes) {
+        super(null);
+        if (this.constructor == AbstractDynamicNode) {
+            throw new Error("Abstract classes can't be instantiated.");
+        }
+        this.fileName = filename;
+        this.attributes = attributes;
     }
 
     generateData() {}
 }
 
-class OneToOneNode extends AbstractNode {
-    constructor(fileName, attributes, foreignFileName, foreignAttributes) {
-        super(fileName, attributes);
-        this.foreignFileName = foreignFileName;
+class BasicNode extends AbstractDynamicNode {
+    constructor(filename, attributes) {
+        super(filename, attributes);
+    }
+
+    generateData() {}
+}
+
+class OneToOneNode extends AbstractDynamicNode {
+    constructor(filename, attributes, foreignFilename, foreignAttributes) {
+        super(filename, attributes);
+        this.foreignFileName = foreignFilename;
         this.foreignAttributes = foreignAttributes;
     }
 
     generateData() {}
 }
 
-class OneToManyNode extends AbstractNode {
-    constructor(fileName, attributes, foreignFileName, foreignAttributes) {
-        super(fileName, attributes);
-        this.foreignFileName = foreignFileName;
+class OneToManyNode extends AbstractDynamicNode {
+    constructor(filename, attributes, foreignFilename, foreignAttributes) {
+        super(filename, attributes);
+        this.foreignFileName = foreignFilename;
         this.foreignAttributes = foreignAttributes;
     }
 
@@ -44,6 +99,13 @@ class OneToManyNode extends AbstractNode {
 
 module.exports = {
     AbstractNode,
+    AbstractFixedNode,
+    StringNode,
+    NumberNode,
+    BooleanNode,
+    ArrayNode,
+    ObjectNode,
+    AbstractDynamicNode,
     BasicNode,
     OneToOneNode,
     OneToManyNode,

@@ -1,9 +1,9 @@
 class AbstractAdapter {
-    constructor(fileName) {
+    constructor(filename) {
         if (this.constructor == AbstractAdapter) {
             throw new Error("Abstract classes can't be instantiated.");
         }
-        this.fileName = "./source/" + fileName;
+        this.fileName = "./source/" + filename;
         this.data = [];
     }
     transformDate() {}
@@ -15,16 +15,16 @@ class AbstractAdapter {
 }
 
 class csvAdapter extends AbstractAdapter {
-    constructor(fileName) {
-        super(fileName + ".csv");
+    constructor(filename) {
+        super(filename + ".csv");
         this.data = this.transformDate(this.fileName);
     }
 
-    transformDate(fileName) {
+    transformDate(filename) {
         const fs = require("fs");
         const csv = require("csv-parser");
         const results = [];
-        const fileData = fs.readFileSync(fileName, "utf8");
+        const fileData = fs.readFileSync(filename, "utf8");
         csv()
             .on("data", (data) => results.push(data))
             .write(fileData);
@@ -46,16 +46,16 @@ class csvAdapter extends AbstractAdapter {
 }
 
 class ndjsonAdapter extends AbstractAdapter {
-    constructor(fileName) {
-        super(fileName + ".ndjson");
+    constructor(filename) {
+        super(filename + ".ndjson");
         this.data = this.transformDate(this.fileName);
     }
 
-    transformDate(fileName) {
+    transformDate(filename) {
         const fs = require("fs");
         const ndjson = require("ndjson");
         const results = [];
-        const fileData = fs.readFileSync(fileName, "utf8");
+        const fileData = fs.readFileSync(filename, "utf8");
         const parser = ndjson.parse();
         parser.on("data", (data) => results.push(data));
         parser.write(fileData);
