@@ -175,14 +175,12 @@ class OneToOneNode extends AbstractDynamicNode {
 
     sequentialSearch(record, database) {
         const foreignKey = record[this.attributes];
-        let foreignRecord = null;
         for (const element of database[this.foreignFileName].getData()) {
-            if (element[this.attributes] == foreignKey) {
-                foreignRecord = element;
-                break;
+            if (element[this.foreignAttributes] == foreignKey) {
+                return element;
             }
         }
-        return foreignRecord[this.foreignAttributes];
+        return null;
     }
 
     binarySearch(record, database) {
@@ -190,16 +188,17 @@ class OneToOneNode extends AbstractDynamicNode {
         const foreignRecords = database[this.foreignFileName].getData();
         let left = 0;
         let right = foreignRecords.length - 1;
-        let middle = Math.floor((left + right) / 2);
         while (left <= right) {
-            if (foreignKey == foreignRecords[middle][this.attributes]) {
-                return foreignRecords[middle][this.foreignAttributes];
-            } else if (foreignKey < foreignRecords[middle][this.attributes]) {
-                right = middle - 1;
-            } else {
+            const middle = Math.floor((left + right) / 2);
+            if (foreignRecords[middle][this.foreignAttributes] == foreignKey) {
+                return foreignRecords[middle];
+            } else if (
+                foreignRecords[middle][this.foreignAttributes] < foreignKey
+            ) {
                 left = middle + 1;
+            } else {
+                right = middle - 1;
             }
-            middle = Math.floor((left + right) / 2);
         }
         return null;
     }
@@ -230,8 +229,8 @@ class OneToManyNode extends AbstractDynamicNode {
         const foreignKey = record[this.attributes];
         let foreignRecords = [];
         for (const element of database[this.foreignFileName].getData()) {
-            if (element[this.attributes] == foreignKey) {
-                foreignRecords.push(element[this.foreignAttributes]);
+            if (element[this.foreignAttributes] == foreignKey) {
+                foreignRecords.push(element);
             }
         }
         return foreignRecords;
@@ -242,37 +241,36 @@ class OneToManyNode extends AbstractDynamicNode {
         const foreignRecords = database[this.foreignFileName].getData();
         let left = 0;
         let right = foreignRecords.length - 1;
-        let middle = Math.floor((left + right) / 2);
         while (left <= right) {
-            if (foreignKey == foreignRecords[middle][this.attributes]) {
-                let foreignRecordsArray = [];
-                let i = middle;
+            const middle = Math.floor((left + right) / 2);
+            if (foreignRecords[middle][this.foreignAttributes] == foreignKey) {
+                let foreignRecordsList = [];
+                let current = middle;
                 while (
-                    i >= 0 &&
-                    foreignKey == foreignRecords[i][this.attributes]
+                    current >= 0 &&
+                    foreignRecords[current][this.foreignAttributes] ==
+                        foreignKey
                 ) {
-                    foreignRecordsArray.push(
-                        foreignRecords[i][this.foreignAttributes]
-                    );
-                    i--;
+                    foreignRecordsList.push(foreignRecords[current]);
+                    current--;
                 }
-                i = middle + 1;
+                current = middle + 1;
                 while (
-                    i < foreignRecords.length &&
-                    foreignKey == foreignRecords[i][this.attributes]
+                    current < foreignRecords.length &&
+                    foreignRecords[current][this.foreignAttributes] ==
+                        foreignKey
                 ) {
-                    foreignRecordsArray.push(
-                        foreignRecords[i][this.foreignAttributes]
-                    );
-                    i++;
+                    foreignRecordsList.push(foreignRecords[current]);
+                    current++;
                 }
-                return foreignRecordsArray;
-            } else if (foreignKey < foreignRecords[middle][this.attributes]) {
-                right = middle - 1;
-            } else {
+                return foreignRecordsList;
+            } else if (
+                foreignRecords[middle][this.foreignAttributes] < foreignKey
+            ) {
                 left = middle + 1;
+            } else {
+                right = middle - 1;
             }
-            middle = Math.floor((left + right) / 2);
         }
         return null;
     }

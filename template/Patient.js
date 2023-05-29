@@ -36,12 +36,15 @@ class Template extends AbstractTemplate {
         this.birthDate = new DecorateNode(
             new ArithmeticNode(
                 [
-                    new OneToOneNode(
-                        "patient",
-                        "subject_id", // the key that used to join the two tables
-                        "transfer",
-                        "intime", // the value that we want to get
-                        true // it mean the foreign table is sorted
+                    new DecorateNode(
+                        new OneToOneNode(
+                            "patient", // the primary table
+                            "subject_id", // the key for primary table to join with foreign table
+                            "transfer", // the foreign table
+                            "subject_id", // the key for foreign table to join with primary table
+                            true // it mean the foreign table is sorted
+                        ),
+                        (record) => record["intime"]
                     ),
                     new BasicNode("patient", "anchor_age"),
                 ],
