@@ -3,22 +3,25 @@ var csv = require("csv-parser");
 var ndjson = require("ndjson");
 
 class AbstractAdapter {
+    // the abstract adapter for different file type
     constructor(filename) {
         if (this.constructor == AbstractAdapter) {
             throw new Error("Abstract classes can't be instantiated.");
         }
-        this.fileName = "./source/" + filename;
-        this.data = [];
+        this.fileName = "./source/" + filename; // the full path of the file
+        this.data = []; // the parsed data for the file
     }
-    transformDate() {}
+    transformDate() {} // transform data to json format
     getData() {
+        // get the full data
         return this.data;
     }
-    getColumnData(columnName) {}
-    getRowData(rowIndex) {}
+    getColumnData(columnName) {} // get the data of a column
+    getRowData(rowIndex) {} // get the data of a row
 }
 
 class csvAdapter extends AbstractAdapter {
+    // parse csv file
     constructor(filename) {
         super(filename);
         this.data = this.transformDate(this.fileName);
@@ -48,6 +51,7 @@ class csvAdapter extends AbstractAdapter {
 }
 
 class ndjsonAdapter extends AbstractAdapter {
+    // parse ndjson file
     constructor(filename) {
         super(filename);
         this.data = this.transformDate(this.fileName);

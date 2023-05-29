@@ -8,6 +8,7 @@ var ConcatenateNode = Nodes["ConcatenateNode"];
 var ArithmeticNode = Nodes["ArithmeticNode"];
 var OneToOneNode = Nodes["OneToOneNode"];
 var DecorateNode = Nodes["DecorateNode"];
+
 class Template extends AbstractTemplate {
     static templateConfig = {
         source: {

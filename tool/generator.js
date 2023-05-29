@@ -1,24 +1,53 @@
-class jsonGenerator {
+class AbstractGenerator {
+    // the abstract class of generator
     constructor(templateName) {
-        this.originalTemplatePath = templateName;
-        this.templatePath = "../template/" + this.originalTemplatePath + ".js";
-        this.template = require(this.templatePath)["Template"]; // it is a class
-        this.templateConfig = this.template.templateConfig;
-        this.templatePrimaryTable = this.templateConfig.primaryTable;
+        if (this.constructor === AbstractGenerator) {
+            throw new TypeError(
+                "Abstract class 'AbstractGenerator' cannot be instantiated directly."
+            );
+        }
+        this.originalTemplatePath = templateName; // the original template path
+        this.templatePath = "../template/" + this.originalTemplatePath + ".js"; // the full path of the template
+        this.template = require(this.templatePath)["Template"]; // it is a template class , it is used to generate the data
+        this.templateConfig = this.template.templateConfig; // the config used by generator
+        this.templatePrimaryTable = this.templateConfig.primaryTable; // the primary table of this template
 
-        this.database = {};
-        this.output = [];
+        this.database = {}; // the database include all the data that within the template source
+        this.output = []; // the output data
+    }
+
+    initializeDatabase(database, templateSource) {} // initialize the database according to the template source
+    generateData(database, templatePrimaryTable, template, output) {} // generate the data according to the template element
+    saveOutput(originalTemplatePath, output) {} // save the output data to the file
+
+    run() {
+        // the main function of the generator
+        this.initializeDatabase(this.database, this.templateConfig.source);
+        this.generateData(
+            this.database,
+            this.templatePrimaryTable,
+            this.template,
+            this.output
+        );
+        this.saveOutput(this.originalTemplatePath, this.output);
+    }
+}
+
+class jsonGenerator extends AbstractGenerator {
+    // the generator for json file
+    constructor(templateName) {
+        super(templateName);
     }
 
     getFilenameExtension(fileName) {
         return fileName.split(".")[1];
     }
 
-    saveOutput() {
+    saveOutput(originalTemplatePath, output) {
         const fs = require("fs");
-        const jsonfile = JSON.stringify(this.output, null, 4);
+        const jsonfile = JSON.stringify(output, null, 4);
         fs.writeFile(
-            "./output/" + this.originalTemplatePath + ".json",
+            "./output/" + originalTemplatePath + ".json",
             jsonfile,
             (err) => {
                 if (err) {
@@ -38,20 +67,19 @@ class jsonGenerator {
         }
     }
 
-    generateData() {
+    generateData(database, templatePrimaryTable, template, output) {
         let currentIndex = 0;
-        const database = this.database;
-        const primaryTable = this.templatePrimaryTable;
-        const primaryData = database[primaryTable].getData();
+        const primaryData = database[templatePrimaryTable].getData();
         for (const record of primaryData) {
             if (currentIndex % 10000 == 0) {
+                // show the current schedule
                 console.log(
                     `current percentage: ${
                         (currentIndex / primaryData.length) * 100
                     }%`
                 );
             }
-            const templateInstance = new this.template();
+            const templateInstance = new template();
             for (const [key, value] of Object.entries(templateInstance)) {
                 templateInstance[key] = value.parseNode(
                     key,
@@ -60,18 +88,13 @@ class jsonGenerator {
                     database
                 );
             }
-            this.output.push(templateInstance);
+            output.push(templateInstance);
             currentIndex += 1;
         }
-    }
-
-    run() {
-        this.initializeDatabase(this.database, this.templateConfig.source);
-        this.generateData();
-        this.saveOutput();
     }
 }
 
 module.exports = {
+    AbstractGenerator,
     jsonGenerator,
 };

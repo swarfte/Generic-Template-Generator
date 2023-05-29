@@ -1,8 +1,9 @@
 class AbstractTemplate {
+    // the abstract class of template
     static templateConfig = {
-        source: {},
-        primaryKey: "",
-        row: 0,
+        // config used by generator
+        source: {}, // include all the source files , nickname : filename(only the filename)
+        primaryTable: "", // the primary table of this template
     };
 
     constructor() {
