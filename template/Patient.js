@@ -44,8 +44,8 @@ class Template extends AbstractTemplate {
                             "patient", // the primary table
                             "subject_id", // the key for primary table to join with foreign table
                             "transfer", // the foreign table
-                            "subject_id", // the key for foreign table to join with primary table
-                            true // it mean the foreign table is sorted by the key
+                            "subject_id" // the key for foreign table to join with primary table
+                            // true // it mean the foreign table is sorted by the key , so the script can run faster
                         ),
                         (record) => record["intime"]
                     ),

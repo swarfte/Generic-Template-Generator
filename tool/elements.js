@@ -72,6 +72,10 @@ class AbstractStructureNode extends AbstractNode {
             throw new Error("Abstract classes can't be instantiated.");
         }
     }
+    parseNode(key, value, record, database) {
+        // override this method in subclass to do some thing that before/ after parsing the data, or modify the data
+        return this.data.parseNode(key, value, record, database);
+    }
 }
 
 class ArrayNode extends AbstractStructureNode {
@@ -167,10 +171,6 @@ class AbstractDynamicNode extends AbstractNode {
         // the function for generating the data , it will be implemented in the subclass
     }
 
-    getData() {
-        return this.data;
-    }
-
     parseNode(key, value, record, database) {
         // we need to generate the data first before get the data
         this.generateData(record, database);
@@ -199,6 +199,7 @@ class AbstractDynamicRelationNode extends AbstractDynamicNode {
         }
     }
     sortMethod(attribute) {
+        // the sort method for the sorted database
         return (a, b) => {
             if (typeof a[attribute] == "string") {
                 return a[attribute].localeCompare(b[attribute]);
@@ -208,9 +209,9 @@ class AbstractDynamicRelationNode extends AbstractDynamicNode {
             }
         };
     }
-    InitializedSortedDatabase(record, database) {}
-    unsortedSearch(record, database) {}
-    sortedSearch(record, database) {}
+    InitializedSortedDatabase(record, database) {} // the function for initializing the sorted database
+    unsortedSearch(record, database) {} // the function for searching the data from the unsorted database
+    sortedSearch(record, database) {} // the function for searching the data from the sorted database
     generateData(record, database) {
         // we need to search the data first before get the data
         this.data = this.sorted
