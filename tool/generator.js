@@ -1,3 +1,4 @@
+var fs = require("fs");
 class AbstractGenerator {
     // the abstract class of generator
     constructor(templateName) {
@@ -44,11 +45,15 @@ class jsonGenerator extends AbstractGenerator {
     }
 
     saveOutput(originalTemplatePath, output) {
-        const fs = require("fs");
-        const jsonfile = JSON.stringify(output, null, 4);
+        let outData = "[";
+        for (let indx = 0; indx < this.output.length - 1; indx++) {
+            outData += JSON.stringify(this.output[indx], null, 4) + ",";
+        }
+        outData +=
+            JSON.stringify(this.output[this.output.length - 1], null, 4) + "]";
         fs.writeFile(
             "./output/" + originalTemplatePath + ".json",
-            jsonfile,
+            outData,
             (err) => {
                 if (err) {
                     throw err;

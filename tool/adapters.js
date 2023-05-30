@@ -13,8 +13,12 @@ class AbstractAdapter {
     }
     transformDate() {} // transform data to json format
     getData() {
-        // get the full data
+        // get the data
         return this.data;
+    }
+    setData(data) {
+        // set the data
+        this.data = data;
     }
     getColumnData(columnName) {} // get the data of a column
     getRowData(rowIndex) {} // get the data of a row

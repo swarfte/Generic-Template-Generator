@@ -10,6 +10,7 @@ class AbstractTemplate {
         if (this.constructor == AbstractTemplate) {
             throw new Error("Abstract classes can't be instantiated.");
         }
+        // write the template here (this.attributeName = new Node() ...)
     }
 }
 
