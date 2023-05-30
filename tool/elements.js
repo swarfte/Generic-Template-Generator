@@ -10,7 +10,13 @@ class AbstractNode {
         // get the data of the node
         return this.data;
     }
-    parseNode(key, value, record, database) {} // the main function of the node , it is used to parse the data according to the node
+    parseNode(key, value, record, database) {
+        // the main function of the node , it is used to parse the data according to the node
+        // key is the attribute name of the template
+        // value is the node of the template
+        // record is the record of the primary table
+        // database contains all the records of all tables
+    }
 }
 
 class AbstractFixedNode extends AbstractNode {
@@ -313,6 +319,121 @@ class OneToManyNode extends AbstractDynamicNode {
         } else {
             this.data = this.binarySearch(record, database);
         }
+<<<<<<< Updated upstream
+=======
+        this.searchData = searchData; // the search data that will be used to search the record
+        this.sorted = sorted; // whether the table is sorted
+    }
+
+    InitializedSortedDatabase(record, database) {
+        if (!(this.fileName in sortedDatabase)) {
+            // the table is not in the sorted database , we need to sort it first
+            sortedDatabase[this.fileName] = {};
+        }
+        if (!(this.attributes in sortedDatabase[this.fileName])) {
+            // the attribute is not in the sorted table , we need to sort it first
+            sortedDatabase[this.fileName][this.attributes] = {};
+            const sortedTable = structuredClone(
+                database[this.fileName].getData()
+            );
+
+            sortedTable.sort(this.sortMethod(this.attributes));
+            sortedDatabase[this.fileName][this.attributes] = sortedTable; // the sorted table is only for the current attribute , different attribute will have different sorted table
+        }
+        return sortedDatabase[this.fileName][this.attributes]; // this a sorted table (array)
+    }
+
+    unsortedSearch(record, database) {
+        const sortedTable = this.InitializedSortedDatabase(record, database);
+        database[this.fileName].setData(sortedTable); // we need to set the sorted table to the foreign table
+        return this.sortedSearch(record, database);
+    }
+
+    deconstructNode(key, value, record, database) {
+        if (this.searchData instanceof AbstractNode) {
+            this.searchData = this.searchData.parseNode(
+                key,
+                value,
+                record,
+                database
+            );
+        }
+    }
+
+    parseNode(key, value, record, database) {
+        // we need to generate the data first before get the data
+        this.deconstructNode(key, value, record, database);
+        this.generateData(record, database);
+        return this.getData();
+    }
+}
+
+class SingleSearchNode extends AbstractDynamicRelationSearchNode {
+    // return only one record from the specified table via the search data of the specified attributes
+    constructor(filename, attributes, searchData, sorted = false) {
+        super(filename, attributes, searchData, sorted);
+    }
+
+    sortedSearch(record, database) {
+        // the binarySearch function for searching the record if the table is sorted , it is more efficient than sequentialSearch
+        const records = database[this.fileName].getData();
+
+        let left = 0;
+        let right = records.length - 1;
+        while (left <= right) {
+            const middle = Math.floor((left + right) / 2);
+            if (records[middle][this.attributes] == this.searchData) {
+                return records[middle];
+            } else if (records[middle][this.attributes] < this.searchData) {
+                left = middle + 1;
+            } else {
+                right = middle - 1;
+            }
+        }
+        return null;
+    }
+}
+
+class MultipleSearchNode extends AbstractDynamicRelationSearchNode {
+    // return multiple records as a list from the specified table via the search data of the specified attributes
+    constructor(filename, attributes, searchData, sorted = false) {
+        super(filename, attributes, searchData, sorted);
+    }
+
+    sortedSearch(record, database) {
+        // the binarySearch function for searching the record if the table is sorted , it is more efficient than sequentialSearch
+        const records = database[this.fileName].getData();
+        let left = 0;
+        let right = records.length - 1;
+        while (left <= right) {
+            const middle = Math.floor((left + right) / 2);
+            if (records[middle][this.attributes] == this.searchData) {
+                let recordsList = [];
+                let current = middle;
+                while (
+                    current >= 0 &&
+                    records[current][this.attributes] == this.searchData
+                ) {
+                    recordsList.push(records[current]);
+                    current--;
+                }
+                current = middle + 1;
+                while (
+                    current < records.length &&
+                    records[current][this.attributes] == this.searchData
+                ) {
+                    recordsList.push(records[current]);
+                    current++;
+                }
+                return recordsList;
+            } else if (records[middle][this.attributes] < this.searchData) {
+                left = middle + 1;
+            } else {
+                right = middle - 1;
+            }
+        }
+        return null;
+>>>>>>> Stashed changes
     }
 }
 
