@@ -191,7 +191,7 @@ class BasicNode extends AbstractDynamicNode {
 }
 
 class AbstractDynamicRelationNode extends AbstractDynamicNode {
-    // the abstract class for all dynamic relation node , it will generate the data according to the record and the reference table (for FK)
+    // the abstract class for all dynamic relation node , it will generate the data according to the record and the reference table (include FK)
     constructor(filename, attributes) {
         super(filename, attributes);
         if (this.constructor == AbstractDynamicRelationNode) {
@@ -219,136 +219,8 @@ class AbstractDynamicRelationNode extends AbstractDynamicNode {
     }
 }
 
-class AbstractDynamicRelationReferenceNode extends AbstractDynamicRelationNode {
-    constructor(
-        filename,
-        attributes,
-        foreignFilename,
-        foreignAttributes,
-        sorted = false
-    ) {
-        super(filename, attributes);
-        if (this.constructor == AbstractDynamicRelationReferenceNode) {
-            throw new Error("Abstract classes can't be instantiated.");
-        }
-        this.foreignFileName = foreignFilename; // the filename of the foreign table
-        this.foreignAttributes = foreignAttributes; // the attributes of the foreign record
-        this.sorted = sorted; // whether the foreign table is sorted
-    }
-    InitializedSortedDatabase(record, database) {
-        if (!(this.foreignFileName in sortedDatabase)) {
-            // the table is not in the sorted database , we need to sort it first
-            sortedDatabase[this.foreignFileName] = {};
-        }
-        if (!(this.foreignAttributes in sortedDatabase[this.foreignFileName])) {
-            // the attribute is not in the sorted table , we need to sort it first
-            sortedDatabase[this.foreignFileName][this.foreignAttributes] = {};
-            const sortedTable = structuredClone(
-                database[this.foreignFileName].getData()
-            );
-            sortedTable.sort(this.sortMethod(this.foreignAttributes));
-            sortedDatabase[this.foreignFileName][this.foreignAttributes] =
-                sortedTable; // the sorted table is only for the current attribute , different attribute will have different sorted table
-        }
-
-        return sortedDatabase[this.foreignFileName][this.foreignAttributes]; // this a sorted table (array)
-    }
-    unsortedSearch(record, database) {
-        const sortedTable = this.InitializedSortedDatabase(record, database);
-        database[this.foreignFileName].setData(sortedTable); // we need to set the sorted table to the foreign table
-        return this.sortedSearch(record, database);
-    }
-}
-class OneToOneNode extends AbstractDynamicRelationReferenceNode {
-    // the node for one to one relationship
-    constructor(
-        filename,
-        attributes,
-        foreignFilename,
-        foreignAttributes,
-        sorted = false
-    ) {
-        super(filename, attributes, foreignFilename, foreignAttributes, sorted);
-    }
-
-    sortedSearch(record, database) {
-        // the binarySearch function for searching the foreign record if the foreign table is sorted , it is more efficient than sequentialSearch
-        const foreignKey = record[this.attributes];
-        const foreignRecords = database[this.foreignFileName].getData();
-        let left = 0;
-        let right = foreignRecords.length - 1;
-
-        while (left <= right) {
-            const middle = Math.floor((left + right) / 2);
-            if (foreignRecords[middle][this.foreignAttributes] == foreignKey) {
-                return foreignRecords[middle];
-            } else if (
-                foreignRecords[middle][this.foreignAttributes] < foreignKey
-            ) {
-                left = middle + 1;
-            } else {
-                right = middle - 1;
-            }
-        }
-        return null;
-    }
-}
-
-class OneToManyNode extends AbstractDynamicRelationReferenceNode {
-    // the node for one to many relationship
-    constructor(
-        filename,
-        attributes,
-        foreignFilename,
-        foreignAttributes,
-        sorted = false
-    ) {
-        super(filename, attributes, foreignFilename, foreignAttributes, sorted);
-    }
-
-    sortedSearch(record, database) {
-        //
-        // the binarySearch function for searching the foreign record if the foreign table is sorted , it is more efficient than sequentialSearch
-        const foreignKey = record[this.attributes];
-        const foreignRecords = database[this.foreignFileName].getData();
-        let left = 0;
-        let right = foreignRecords.length - 1;
-        while (left <= right) {
-            const middle = Math.floor((left + right) / 2);
-            if (foreignRecords[middle][this.foreignAttributes] == foreignKey) {
-                let foreignRecordsList = [];
-                let current = middle;
-                while (
-                    current >= 0 &&
-                    foreignRecords[current][this.foreignAttributes] ==
-                        foreignKey
-                ) {
-                    foreignRecordsList.push(foreignRecords[current]);
-                    current--;
-                }
-                current = middle + 1;
-                while (
-                    current < foreignRecords.length &&
-                    foreignRecords[current][this.foreignAttributes] ==
-                        foreignKey
-                ) {
-                    foreignRecordsList.push(foreignRecords[current]);
-                    current++;
-                }
-                return foreignRecordsList;
-            } else if (
-                foreignRecords[middle][this.foreignAttributes] < foreignKey
-            ) {
-                left = middle + 1;
-            } else {
-                right = middle - 1;
-            }
-        }
-        return null;
-    }
-}
-
 class AbstractDynamicRelationSearchNode extends AbstractDynamicRelationNode {
+    // search the foreign data from the specified data
     constructor(filename, attributes, searchData, sorted = false) {
         super(filename, attributes);
         if (this.constructor == AbstractDynamicRelationSearchNode) {
@@ -469,6 +341,39 @@ class MultipleSearchNode extends AbstractDynamicRelationSearchNode {
     }
 }
 
+class OneToOneNode extends SingleSearchNode {
+    constructor(
+        filename,
+        attributes,
+        foreignFilename,
+        foreignAttributes,
+        sorted = false
+    ) {
+        super(
+            foreignFilename,
+            foreignAttributes,
+            new BasicNode(filename, attributes),
+            sorted
+        );
+    }
+}
+
+class OneToManyNode extends MultipleSearchNode {
+    constructor(
+        filename,
+        attributes,
+        foreignFilename,
+        foreignAttributes,
+        sorted = false
+    ) {
+        super(
+            foreignFilename,
+            foreignAttributes,
+            new BasicNode(filename, attributes),
+            sorted
+        );
+    }
+}
 module.exports = {
     AbstractNode,
     AbstractFixedNode,
@@ -484,10 +389,9 @@ module.exports = {
     AbstractDynamicNode,
     BasicNode,
     AbstractDynamicRelationNode,
-    AbstractDynamicRelationReferenceNode,
-    OneToOneNode,
-    OneToManyNode,
     AbstractDynamicRelationSearchNode,
     SingleSearchNode,
     MultipleSearchNode,
+    OneToOneNode,
+    OneToManyNode,
 };

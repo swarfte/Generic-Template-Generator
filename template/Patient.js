@@ -7,6 +7,7 @@ var ArrayNode = Nodes["ArrayNode"];
 var ConcatenateNode = Nodes["ConcatenateNode"];
 var ArithmeticNode = Nodes["ArithmeticNode"];
 var OneToOneNode = Nodes["OneToOneNode"];
+var OneToManyNode = Nodes["OneToManyNode"];
 var DecorateNode = Nodes["DecorateNode"];
 var SingleSearchNode = Nodes["SingleSearchNode"];
 
