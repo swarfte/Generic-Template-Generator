@@ -19,6 +19,7 @@ class AbstractNode {
         // value is the node of the template
         // record is the record of the primary table
         // database contains all the records of all tables
+        throw new Error("You have to implement the method parseNode!");
     }
 }
 

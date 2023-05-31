@@ -13,7 +13,7 @@ class AbstractGenerator {
         this.templateConfig = this.template.templateConfig; // the config used by generator
         this.templatePrimaryTable = this.templateConfig.primaryTable; // the primary table of this template
 
-        this.database = {}; // the database include all the data that within the template source
+        this.database = {}; // the input data (database) include all the data that within the template source
         this.output = []; // the output data
     }
 
@@ -31,7 +31,33 @@ class AbstractGenerator {
         }
     }
 
-    generateData(database, templatePrimaryTable, template, output) {} // generate the data according to the template element
+    generateData(database, templatePrimaryTable, template, output) {
+        // generate the data according to the template element
+        let currentIndex = 0;
+        const primaryData = database[templatePrimaryTable].getData();
+        for (const record of primaryData) {
+            if (currentIndex % 10000 == 0) {
+                // show the current schedule
+                console.log(
+                    `current percentage: ${
+                        (currentIndex / primaryData.length) * 100
+                    }%`
+                );
+            }
+            const templateInstance = new template();
+            for (const [key, value] of Object.entries(templateInstance)) {
+                templateInstance[key] = value.parseNode(
+                    key,
+                    value,
+                    record,
+                    database
+                );
+            }
+            output.push(templateInstance);
+            currentIndex += 1;
+        }
+    }
+
     saveOutput(originalTemplatePath, output) {} // save the output data to the file
 
     run() {
@@ -71,32 +97,6 @@ class jsonGenerator extends AbstractGenerator {
             }
         );
     }
-
-    generateData(database, templatePrimaryTable, template, output) {
-        let currentIndex = 0;
-        const primaryData = database[templatePrimaryTable].getData();
-        for (const record of primaryData) {
-            if (currentIndex % 10000 == 0) {
-                // show the current schedule
-                console.log(
-                    `current percentage: ${
-                        (currentIndex / primaryData.length) * 100
-                    }%`
-                );
-            }
-            const templateInstance = new template();
-            for (const [key, value] of Object.entries(templateInstance)) {
-                templateInstance[key] = value.parseNode(
-                    key,
-                    value,
-                    record,
-                    database
-                );
-            }
-            output.push(templateInstance);
-            currentIndex += 1;
-        }
-    }
 }
 
 class ndjsonGenerator extends AbstractGenerator {
@@ -120,31 +120,42 @@ class ndjsonGenerator extends AbstractGenerator {
             }
         );
     }
+}
 
-    generateData(database, templatePrimaryTable, template, output) {
-        let currentIndex = 0;
-        const primaryData = database[templatePrimaryTable].getData();
-        for (const record of primaryData) {
-            if (currentIndex % 10000 == 0) {
-                // show the current schedule
-                console.log(
-                    `current percentage: ${
-                        (currentIndex / primaryData.length) * 100
-                    }%`
-                );
-            }
-            const templateInstance = new template();
-            for (const [key, value] of Object.entries(templateInstance)) {
-                templateInstance[key] = value.parseNode(
-                    key,
-                    value,
-                    record,
-                    database
-                );
-            }
-            output.push(templateInstance);
-            currentIndex += 1;
+class csvGenerator extends AbstractGenerator {
+    constructor(templateName) {
+        super(templateName);
+    }
+
+    saveOutput(originalTemplatePath, output) {
+        let csvData = [];
+        let columnName = [];
+        for (const [key, value] of Object.entries(output[0])) {
+            columnName.push(key);
         }
+        csvData.push(columnName);
+        for (const record of output) {
+            let row = [];
+            for (const [key, value] of Object.entries(record)) {
+                row.push(JSON.stringify(value));
+            }
+            csvData.push(row);
+        }
+        let csvContent = "";
+        csvData.forEach(function (rowArray) {
+            let row = rowArray.join(",");
+            csvContent += row + "\r\n";
+        });
+        fs.writeFile(
+            "./output/" + originalTemplatePath + ".csv",
+            csvContent,
+            (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log("CSV data is saved.");
+            }
+        );
     }
 }
 
@@ -152,6 +163,7 @@ var moduleList = {
     AbstractGenerator,
     jsonGenerator,
     ndjsonGenerator,
+    csvGenerator,
 };
 
 class ImportModule {
