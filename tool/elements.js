@@ -376,6 +376,7 @@ class OneToManyNode extends MultipleSearchNode {
     }
 }
 
+// export the module
 var moduleList = {
     AbstractNode,
     AbstractFixedNode,

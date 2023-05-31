@@ -17,7 +17,20 @@ class AbstractGenerator {
         this.output = []; // the output data
     }
 
-    initializeDatabase(database, templateSource) {} // initialize the database according to the template source
+    getFilenameExtension(fileName) {
+        return fileName.split(".")[1];
+    }
+
+    initializeDatabase(database, templateSource) {
+        // initialize the database according to the template source
+        for (const [key, value] of Object.entries(templateSource)) {
+            let filenameExtension = this.getFilenameExtension(value);
+            let adapterName = filenameExtension + "Adapter";
+            let adapter = require("../tool/adapters.js")[adapterName];
+            database[key] = new adapter(value);
+        }
+    }
+
     generateData(database, templatePrimaryTable, template, output) {} // generate the data according to the template element
     saveOutput(originalTemplatePath, output) {} // save the output data to the file
 
@@ -40,10 +53,6 @@ class jsonGenerator extends AbstractGenerator {
         super(templateName);
     }
 
-    getFilenameExtension(fileName) {
-        return fileName.split(".")[1];
-    }
-
     saveOutput(originalTemplatePath, output) {
         let outData = "[";
         for (let indx = 0; indx < this.output.length - 1; indx++) {
@@ -61,15 +70,6 @@ class jsonGenerator extends AbstractGenerator {
                 console.log("JSON data is saved.");
             }
         );
-    }
-
-    initializeDatabase(database, templateSource) {
-        for (const [key, value] of Object.entries(templateSource)) {
-            let filenameExtension = this.getFilenameExtension(value);
-            let adapterName = filenameExtension + "Adapter";
-            let adapter = require("../tool/adapters.js")[adapterName];
-            database[key] = new adapter(value);
-        }
     }
 
     generateData(database, templatePrimaryTable, template, output) {
@@ -99,7 +99,74 @@ class jsonGenerator extends AbstractGenerator {
     }
 }
 
-module.exports = {
+class ndjsonGenerator extends AbstractGenerator {
+    constructor(templateName) {
+        super(templateName);
+    }
+
+    saveOutput(originalTemplatePath, output) {
+        let outData = "";
+        for (const record of output) {
+            outData += JSON.stringify(record) + "\n";
+        }
+        fs.writeFile(
+            "./output/" + originalTemplatePath + ".ndjson",
+            outData,
+            (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log("NDJSON data is saved.");
+            }
+        );
+    }
+
+    generateData(database, templatePrimaryTable, template, output) {
+        let currentIndex = 0;
+        const primaryData = database[templatePrimaryTable].getData();
+        for (const record of primaryData) {
+            if (currentIndex % 10000 == 0) {
+                // show the current schedule
+                console.log(
+                    `current percentage: ${
+                        (currentIndex / primaryData.length) * 100
+                    }%`
+                );
+            }
+            const templateInstance = new template();
+            for (const [key, value] of Object.entries(templateInstance)) {
+                templateInstance[key] = value.parseNode(
+                    key,
+                    value,
+                    record,
+                    database
+                );
+            }
+            output.push(templateInstance);
+            currentIndex += 1;
+        }
+    }
+}
+
+var moduleList = {
     AbstractGenerator,
     jsonGenerator,
+    ndjsonGenerator,
 };
+
+class ImportModule {
+    // this class is used to import the module to the global scope
+    static importModuleList = moduleList;
+    constructor() {}
+    static load() {
+        // use this method when require the elements.js
+        for (const [key, value] of Object.entries(
+            ImportModule.importModuleList
+        )) {
+            global[key] = value;
+        }
+    }
+}
+
+module.exports = moduleList;
+module.exports.ImportModule = ImportModule;
