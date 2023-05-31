@@ -4,7 +4,7 @@ const sortedDatabase = {
 class AbstractNode {
     // the abstract class for all nde
     constructor(data) {
-        if (this.constructor == AbstractNode) {
+        if (this.constructor === AbstractNode) {
             throw new Error("Abstract classes can't be instantiated.");
         }
         this.data = data; // the data of the node
@@ -27,7 +27,7 @@ class AbstractFixedNode extends AbstractNode {
     // the abstract class for all fixed node
     constructor(data) {
         super(data);
-        if (this.constructor == AbstractFixedNode) {
+        if (this.constructor === AbstractFixedNode) {
             throw new Error("Abstract classes can't be instantiated.");
         }
     }
@@ -42,6 +42,9 @@ class StringNode extends AbstractFixedNode {
     constructor(data) {
         super(data);
     }
+    getData() {
+        return String(super.getData());
+    }
 }
 
 class NumberNode extends AbstractFixedNode {
@@ -51,7 +54,7 @@ class NumberNode extends AbstractFixedNode {
     }
 
     getData() {
-        return String(this.data);
+        return Number(super.getData());
     }
 }
 
@@ -61,7 +64,37 @@ class BooleanNode extends AbstractFixedNode {
         super(data);
     }
     getData() {
-        return String(this.data);
+        return Boolean(super.getData());
+    }
+}
+
+class DateNode extends AbstractFixedNode {
+    // the node for data
+    constructor(data) {
+        super(data);
+    }
+    getData() {
+        return new Date(super.getData());
+    }
+}
+
+class NullNode extends AbstractFixedNode {
+    // the node for null
+    constructor(data) {
+        super(data);
+    }
+    getData() {
+        return null;
+    }
+}
+
+class UndefinedNode extends AbstractFixedNode {
+    // the node for undefined
+    constructor(data) {
+        super(data);
+    }
+    getData() {
+        return undefined;
     }
 }
 
@@ -69,7 +102,7 @@ class AbstractStructureNode extends AbstractNode {
     // the abstract class for all structure node , it includes another node for parsing the data
     constructor(data) {
         super(data);
-        if (this.constructor == AbstractStructureNode) {
+        if (this.constructor === AbstractStructureNode) {
             throw new Error("Abstract classes can't be instantiated.");
         }
     }
@@ -161,7 +194,7 @@ class AbstractDynamicNode extends AbstractNode {
     // the abstract class for all dynamic node , it will generate the data according to database (without FK)
     constructor(filename, attributes) {
         super(null);
-        if (this.constructor == AbstractDynamicNode) {
+        if (this.constructor === AbstractDynamicNode) {
             throw new Error("Abstract classes can't be instantiated.");
         }
         this.fileName = filename; // the filename of the table
@@ -195,7 +228,7 @@ class AbstractDynamicRelationNode extends AbstractDynamicNode {
     // the abstract class for all dynamic relation node , it will generate the data according to the record and the reference table (include FK)
     constructor(filename, attributes) {
         super(filename, attributes);
-        if (this.constructor == AbstractDynamicRelationNode) {
+        if (this.constructor === AbstractDynamicRelationNode) {
             throw new Error("Abstract classes can't be instantiated.");
         }
     }
@@ -210,9 +243,15 @@ class AbstractDynamicRelationNode extends AbstractDynamicNode {
             }
         };
     }
-    InitializedSortedDatabase(record, database) {} // the function for initializing the sorted database
-    unsortedSearch(record, database) {} // the function for searching the data from the unsorted database
-    sortedSearch(record, database) {} // the function for searching the data from the sorted database
+    InitializedSortedDatabase(record, database) {
+        // the function for initializing the sorted database
+    }
+    unsortedSearch(record, database) {
+        // the function for searching the data from the unsorted database
+    }
+    sortedSearch(record, database) {
+        // the function for searching the data from the sorted database
+    }
     generateData(record, database) {
         // we need to search the data first before get the data
         this.data = this.sorted
@@ -225,7 +264,7 @@ class AbstractDynamicRelationSearchNode extends AbstractDynamicRelationNode {
     // search the foreign data from the specified data
     constructor(filename, attributes, searchData, sorted = false) {
         super(filename, attributes);
-        if (this.constructor == AbstractDynamicRelationSearchNode) {
+        if (this.constructor === AbstractDynamicRelationSearchNode) {
             throw new Error("Abstract classes can't be instantiated.");
         }
         this.searchData = searchData; // the search data that will be used to search the record
@@ -289,7 +328,7 @@ class SingleSearchNode extends AbstractDynamicRelationSearchNode {
         let right = records.length - 1;
         while (left <= right) {
             const middle = Math.floor((left + right) / 2);
-            if (records[middle][this.attributes] == this.searchData) {
+            if (records[middle][this.attributes] === this.searchData) {
                 return records[middle];
             } else if (records[middle][this.attributes] < this.searchData) {
                 left = middle + 1;
@@ -314,12 +353,12 @@ class MultipleSearchNode extends AbstractDynamicRelationSearchNode {
         let right = records.length - 1;
         while (left <= right) {
             const middle = Math.floor((left + right) / 2);
-            if (records[middle][this.attributes] == this.searchData) {
+            if (records[middle][this.attributes] === this.searchData) {
                 let recordsList = [];
                 let current = middle;
                 while (
                     current >= 0 &&
-                    records[current][this.attributes] == this.searchData
+                    records[current][this.attributes] === this.searchData
                 ) {
                     recordsList.push(records[current]);
                     current--;
@@ -327,7 +366,7 @@ class MultipleSearchNode extends AbstractDynamicRelationSearchNode {
                 current = middle + 1;
                 while (
                     current < records.length &&
-                    records[current][this.attributes] == this.searchData
+                    records[current][this.attributes] === this.searchData
                 ) {
                     recordsList.push(records[current]);
                     current++;
@@ -378,12 +417,15 @@ class OneToManyNode extends MultipleSearchNode {
 }
 
 // export the module
-var moduleList = {
+const moduleList = {
     AbstractNode,
     AbstractFixedNode,
     StringNode,
     NumberNode,
     BooleanNode,
+    DateNode,
+    NullNode,
+    UndefinedNode,
     AbstractStructureNode,
     ArrayNode,
     ObjectNode,
@@ -403,7 +445,9 @@ var moduleList = {
 class ImportModule {
     // this class is used to import the module to the global scope
     static importModuleList = moduleList;
-    constructor() {}
+    constructor() {
+        throw new Error("This class cannot be instantiated");
+    }
     static load() {
         // use this method when require the elements.js
         for (const [key, value] of Object.entries(
@@ -411,6 +455,7 @@ class ImportModule {
         )) {
             global[key] = value;
         }
+        return ImportModule.importModuleList;
     }
 }
 

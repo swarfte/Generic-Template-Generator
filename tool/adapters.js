@@ -5,23 +5,38 @@ const ndjson = require("ndjson");
 class AbstractAdapter {
     // the abstract adapter for different file type
     constructor(filename) {
-        if (this.constructor == AbstractAdapter) {
+        if (this.constructor === AbstractAdapter) {
             throw new Error("Abstract classes can't be instantiated.");
         }
         this.fileName = "./source/" + filename; // the full path of the file
         this.data = []; // the parsed data for the file
     }
-    transformDate() {} // transform data to json format
+
+    transformDate() {
+        //  transform data to json format
+    }
+
     getData() {
         // get the data
         return this.data;
     }
+
     setData(data) {
         // set the data
         this.data = data;
     }
-    getColumnData(columnName) {} // get the data of a column
-    getRowData(rowIndex) {} // get the data of a row
+
+    getColumnData(columnName) {
+        let column = [];
+        for (const element of this.data) {
+            column.push(element[columnName]);
+        }
+        return column;
+    }
+
+    getRowData(rowIndex) {
+        return this.data[rowIndex];
+    }
 }
 
 class csvAdapter extends AbstractAdapter {
@@ -40,18 +55,6 @@ class csvAdapter extends AbstractAdapter {
 
         return results;
     }
-
-    getColumnData(columnName) {
-        let column = [];
-        for (let i = 0; i < this.data.length; i++) {
-            column.push(this.data[i][columnName]);
-        }
-        return column;
-    }
-
-    getRowData(rowIndex) {
-        return this.data[rowIndex];
-    }
 }
 
 class ndjsonAdapter extends AbstractAdapter {
@@ -69,18 +72,6 @@ class ndjsonAdapter extends AbstractAdapter {
         parser.write(fileData);
         return results;
     }
-
-    getColumnData(columnName) {
-        let column = [];
-        for (let i = 0; i < this.data.length; i++) {
-            column.push(this.data[i][columnName]);
-        }
-        return column;
-    }
-
-    getRowData(rowIndex) {
-        return this.data[rowIndex];
-    }
 }
 
 class jsonAdapter extends AbstractAdapter {
@@ -95,17 +86,6 @@ class jsonAdapter extends AbstractAdapter {
         return JSON.parse(fileData);
     }
 
-    getColumnData(columnName) {
-        let column = [];
-        for (let i = 0; i < this.data.length; i++) {
-            column.push(this.data[i][columnName]);
-        }
-        return column;
-    }
-
-    getRowData(rowIndex) {
-        return this.data[rowIndex];
-    }
 }
 
 module.exports = {

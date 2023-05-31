@@ -1,5 +1,5 @@
 const fs = require("fs");
-//var fastStringify = require('fast-safe-stringify');
+
 class AbstractGenerator {
     // the abstract class of generator
     constructor(templateName) {
@@ -37,7 +37,7 @@ class AbstractGenerator {
         let currentIndex = 0;
         const primaryData = database[templatePrimaryTable].getData();
         for (const record of primaryData) {
-            if (currentIndex % 10000 == 0) {
+            if (currentIndex % 10000 === 0) {
                 // show the current schedule
                 console.log(
                     `current percentage: ${
@@ -82,11 +82,11 @@ class jsonGenerator extends AbstractGenerator {
 
     saveOutput(originalTemplatePath, output) {
         let outData = "[";
-        for (let indx = 0; indx < this.output.length - 1; indx++) {
-            outData += JSON.stringify(this.output[indx], null, 4) + ",";
+        for (let index = 0; index < output.length - 1; index++) {
+            outData += JSON.stringify(output[index], null, 4) + ",";
         }
-        outData +=
-            JSON.stringify(this.output[this.output.length - 1], null, 4) + "]";
+        outData += JSON.stringify(output[output.length - 1], null, 4) + "]";
+
         fs.writeFile(
             "./output/" + originalTemplatePath + ".json",
             outData,
@@ -131,13 +131,13 @@ class csvGenerator extends AbstractGenerator {
     saveOutput(originalTemplatePath, output) {
         let csvData = [];
         let columnName = [];
-        for (const [key, value] of Object.entries(output[0])) {
+        for (const key of Object.keys(output[0])) {
             columnName.push(key);
         }
         csvData.push(columnName);
         for (const record of output) {
             let row = [];
-            for (const [key, value] of Object.entries(record)) {
+            for (const value of Object.values(record)) {
                 row.push(JSON.stringify(value));
             }
             csvData.push(row);
@@ -160,7 +160,7 @@ class csvGenerator extends AbstractGenerator {
     }
 }
 
-var moduleList = {
+const moduleList = {
     AbstractGenerator,
     jsonGenerator,
     ndjsonGenerator,
@@ -170,7 +170,9 @@ var moduleList = {
 class ImportModule {
     // this class is used to import the module to the global scope
     static importModuleList = moduleList;
-    constructor() {}
+    constructor() {
+        throw new Error("This class cannot be instantiated.");
+    }
     static load() {
         // use this method when require the elements.js
         for (const [key, value] of Object.entries(

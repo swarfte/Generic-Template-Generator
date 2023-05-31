@@ -28,29 +28,29 @@ class Template extends AbstractTemplate {
             outtime: new BasicNode("transfer", "outtime"),
         });
 
-        // this.null = new ArrayNode([
-        //     new StringNode("status"),
-        //     new StringNode("operationalStatus"),
-        //     new StringNode("alias"),
-        //     new StringNode("description"),
-        //     new StringNode("mode"),
-        //     new StringNode("type"),
-        //     new StringNode("contact"),
-        //     new StringNode("address"),
-        //     new StringNode("form"),
-        //     new ObjectNode({
-        //         position: new ArrayNode([
-        //             new StringNode("longitude"),
-        //             new StringNode("latitude"),
-        //             new StringNode("altitude"),
-        //         ]),
-        //     }),
-        //     new StringNode("partOf"),
-        //     new String("characteristic"),
-        //     new StringNode("hoursOfOperation"),
-        //     new StringNode("virtualService"),
-        //     new StringNode("endpoint"),
-        // ]);
+        this.null = new ArrayNode([
+            new StringNode("status"),
+            new StringNode("operationalStatus"),
+            new StringNode("alias"),
+            new StringNode("description"),
+            new StringNode("mode"),
+            new StringNode("type"),
+            new StringNode("contact"),
+            new StringNode("address"),
+            new StringNode("form"),
+            new ObjectNode({
+                position: new ArrayNode([
+                    new StringNode("longitude"),
+                    new StringNode("latitude"),
+                    new StringNode("altitude"),
+                ]),
+            }),
+            new StringNode("partOf"),
+            new StringNode("characteristic"),
+            new StringNode("hoursOfOperation"),
+            new StringNode("virtualService"),
+            new StringNode("endpoint"),
+        ]);
     }
 }
 
