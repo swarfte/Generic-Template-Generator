@@ -1,8 +1,10 @@
 class AbstractTemplate {
     // the abstract class of template
+
+    static nodeModule = require("../tool/elements.js")["ImportModule"].load();
     static templateConfig = {
-        // config used by generator
-        source: {}, // include all the source files , nickname : filename(only the filename)
+        // override the config by the custom template
+        source: {}, // include all the source files , nickname : filename(only the filename and file extension)
         primaryTable: "", // the primary table of this template
     };
 

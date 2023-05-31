@@ -375,7 +375,8 @@ class OneToManyNode extends MultipleSearchNode {
         );
     }
 }
-module.exports = {
+
+var moduleList = {
     AbstractNode,
     AbstractFixedNode,
     StringNode,
@@ -396,3 +397,20 @@ module.exports = {
     OneToOneNode,
     OneToManyNode,
 };
+
+class ImportModule {
+    // this class is used to import the module to the global scope
+    static importModuleList = moduleList;
+    constructor() {}
+    static load() {
+        // use this method when require the elements.js
+        for (const [key, value] of Object.entries(
+            ImportModule.importModuleList
+        )) {
+            global[key] = value;
+        }
+    }
+}
+
+module.exports = moduleList;
+module.exports.ImportModule = ImportModule;

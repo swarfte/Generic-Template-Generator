@@ -1,14 +1,4 @@
 var AbstractTemplate = require("../tool/template.js")["AbstractTemplate"];
-var Nodes = require("../tool/elements.js");
-var StringNode = Nodes["StringNode"];
-var BasicNode = Nodes["BasicNode"];
-var ObjectNode = Nodes["ObjectNode"];
-var ArrayNode = Nodes["ArrayNode"];
-var ConcatenateNode = Nodes["ConcatenateNode"];
-var ArithmeticNode = Nodes["ArithmeticNode"];
-var OneToOneNode = Nodes["OneToOneNode"];
-var DecorateNode = Nodes["DecorateNode"];
-var SingleSearchNode = Nodes["SingleSearchNode"];
 
 class Template extends AbstractTemplate {
     static templateConfig = {
