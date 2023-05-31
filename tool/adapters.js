@@ -1,6 +1,6 @@
-var fs = require("fs");
-var csv = require("csv-parser");
-var ndjson = require("ndjson");
+const fs = require("fs");
+const csv = require("csv-parser");
+const ndjson = require("ndjson");
 
 class AbstractAdapter {
     // the abstract adapter for different file type

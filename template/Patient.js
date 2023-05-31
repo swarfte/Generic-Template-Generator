@@ -1,4 +1,4 @@
-var AbstractTemplate = require("../tool/template.js")["AbstractTemplate"];
+const AbstractTemplate = require("../tool/template.js")["AbstractTemplate"];
 
 class Template extends AbstractTemplate {
     static templateConfig = {
@@ -51,6 +51,42 @@ class Template extends AbstractTemplate {
         this.managingOrganization = new ArrayNode([
             new ObjectNode({
                 reference: new StringNode("Organization_1194052720"),
+            }),
+        ]);
+        this.extension = new ObjectNode({
+            anchor_year: new BasicNode("patient", "anchor_year"),
+            anchor_year_group: new BasicNode("patient", "anchor_year_group"),
+        });
+        this.null = new ArrayNode([
+            new StringNode("active"),
+            new StringNode("telecom"),
+            new ObjectNode({
+                "deceased[x]": new ArrayNode([
+                    new StringNode("deceasedBoolean"),
+                    new StringNode("deceasedDateTime"),
+                ]),
+            }),
+            new StringNode("address"),
+            new StringNode("maritalStatus"),
+            new ObjectNode({
+                "multipleBirth[x]": new ArrayNode([
+                    new StringNode("multipleBirthBoolean"),
+                    new StringNode("multipleBirthInteger"),
+                ]),
+            }),
+            new StringNode("photo"),
+            new ObjectNode({
+                communication: new ArrayNode([
+                    new StringNode("language"),
+                    new StringNode("preferred"),
+                ]),
+            }),
+            new StringNode("generalPractitioner"),
+            new ObjectNode({
+                link: new ArrayNode([
+                    new StringNode("other"),
+                    new StringNode("type"),
+                ]),
             }),
         ]);
     }

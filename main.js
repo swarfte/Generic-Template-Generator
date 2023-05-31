@@ -6,6 +6,6 @@ if (generatorName === undefined) {
     generatorName = "json";
 }
 
-var Generator = require("./tool/generator.js")[generatorName + "Generator"];
+const Generator = require("./tool/generator.js")[generatorName + "Generator"];
 
 const generator = new Generator(templateName).run();

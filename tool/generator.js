@@ -1,4 +1,5 @@
-var fs = require("fs");
+const fs = require("fs");
+//var fastStringify = require('fast-safe-stringify');
 class AbstractGenerator {
     // the abstract class of generator
     constructor(templateName) {
@@ -25,8 +26,8 @@ class AbstractGenerator {
         // initialize the database according to the template source
         for (const [key, value] of Object.entries(templateSource)) {
             let filenameExtension = this.getFilenameExtension(value);
-            let adapterName = filenameExtension + "Adapter";
-            let adapter = require("../tool/adapters.js")[adapterName];
+            const adapterName = filenameExtension + "Adapter";
+            const adapter = require("../tool/adapters.js")[adapterName];
             database[key] = new adapter(value);
         }
     }

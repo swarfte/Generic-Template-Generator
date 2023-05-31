@@ -1,4 +1,4 @@
-var sortedDatabase = {
+const sortedDatabase = {
     // the sorted database
 };
 class AbstractNode {
