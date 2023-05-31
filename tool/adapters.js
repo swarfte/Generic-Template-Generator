@@ -83,8 +83,34 @@ class ndjsonAdapter extends AbstractAdapter {
     }
 }
 
+class jsonAdapter extends AbstractAdapter {
+    // parse json file
+    constructor(filename) {
+        super(filename);
+        this.data = this.transformDate(this.fileName);
+    }
+
+    transformDate(filename) {
+        const fileData = fs.readFileSync(filename, "utf8");
+        return JSON.parse(fileData);
+    }
+
+    getColumnData(columnName) {
+        let column = [];
+        for (let i = 0; i < this.data.length; i++) {
+            column.push(this.data[i][columnName]);
+        }
+        return column;
+    }
+
+    getRowData(rowIndex) {
+        return this.data[rowIndex];
+    }
+}
+
 module.exports = {
     AbstractAdapter,
     csvAdapter,
     ndjsonAdapter,
+    jsonAdapter,
 };
