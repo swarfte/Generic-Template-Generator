@@ -23,6 +23,7 @@ class AbstractMerge(object):
         return file_list
 
     def merge(self):
+        # override this method in subclass
         pass
 
 
@@ -31,16 +32,21 @@ class jsonMerge(AbstractMerge):
         super().__init__(file_name, file_extension)
 
     def merge(self):
+        print("reading json file")
         for file in self.file_list:
             print(file)
             with open(self.directory + file, "r") as f:
                 temp_data = f.read()
-                self.output_data.append(json.loads(temp_data))
+                json_array = json.loads(temp_data)
+                for data in json_array:
+                    self.output_data.append(data)
 
+        print("writing json file")
         with open(self.directory + self.file_name + "." + self.file_extension, "w") as f:
-            json.dump(self.output_data, f,indent=4)
+            json.dump(self.output_data, f, indent=4)
 
         # remove the old file
+        print("removing old file")
         for file in self.file_list:
             os.remove(self.directory + file)
 
