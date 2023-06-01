@@ -97,6 +97,9 @@ class Template extends AbstractTemplate {
         this.serviceProvider = new ObjectNode({
             reference: new StringNode("Organization_1194052720"),
         });
+        this.extension = new ObjectNode({
+
+        })
     }
 }
 

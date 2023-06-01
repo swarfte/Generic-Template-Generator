@@ -1,4 +1,5 @@
 const fs = require("fs");
+const JSONStream = require('JSONStream');
 
 class AbstractGenerator {
     // the abstract class of generator
@@ -40,7 +41,7 @@ class AbstractGenerator {
             if (currentIndex % 10000 === 0) {
                 // show the current schedule
                 console.log(
-                    `current percentage: ${
+                    `current generate percentage: ${
                         (currentIndex / primaryData.length) * 100
                     }%`
                 );
@@ -59,7 +60,8 @@ class AbstractGenerator {
         }
     }
 
-    saveOutput(originalTemplatePath, output) {} // save the output data to the file
+    saveOutput(originalTemplatePath, output) {
+    } // save the output data to the file
 
     run() {
         // the main function of the generator
@@ -80,16 +82,43 @@ class jsonGenerator extends AbstractGenerator {
         super(templateName);
     }
 
-    saveOutput(originalTemplatePath, output) {
-        let outData = "[";
-        for (let index = 0; index < output.length - 1; index++) {
-            outData += JSON.stringify(output[index], null, 4) + ",";
+    validString(str, count) {
+        if (str.length < 524288000) { //  the maximum size of string is 512MB , so we set the threshold to 500MB
+            return [str, count];
         }
-        outData += JSON.stringify(output[output.length - 1], null, 4) + "]";
+        // write the string in the json file
+        let filename = "./output/" + this.originalTemplatePath + "_" + count + ".json";
+        fs.writeFile(filename, str, (err) => {
+            if (err) {
+                throw err;
+            }
+            console.log("JSON partition data is saved.");
+        });
+        return ["", count + 1];
+    }
 
+    saveOutput(originalTemplatePath, output) {
+
+        let outputData = "[";
+        let count = 0;
+        for (let index = 0; index < output.length - 1; index++) {
+            if (index % 10000 === 0) {
+                // show the current schedule
+                console.log(
+                    `current save percentage: ${
+                        (index / output.length) * 100
+                    }%`
+                );
+            }
+            [outputData, count] = this.validString(outputData, count);
+            outputData += JSON.stringify(output[index], null, 4) + ",";
+        }
+        outputData += JSON.stringify(output[output.length - 1], null, 4) + "]";
+
+        let outputPath = count === 0 ? "./output/" + originalTemplatePath + ".json" : "./output/" + originalTemplatePath + "_" + count + ".json";
         fs.writeFile(
-            "./output/" + originalTemplatePath + ".json",
-            outData,
+            outputPath,
+            outputData,
             (err) => {
                 if (err) {
                     throw err;
@@ -97,6 +126,7 @@ class jsonGenerator extends AbstractGenerator {
                 console.log("JSON data is saved.");
             }
         );
+
     }
 }
 
@@ -170,9 +200,11 @@ const moduleList = {
 class ImportModule {
     // this class is used to import the module to the global scope
     static importModuleList = moduleList;
+
     constructor() {
         throw new Error("This class cannot be instantiated.");
     }
+
     static load() {
         // use this method when require the elements.js
         for (const [key, value] of Object.entries(
