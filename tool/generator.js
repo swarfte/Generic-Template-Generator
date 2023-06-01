@@ -1,5 +1,4 @@
 const fs = require("fs");
-const JSONStream = require('JSONStream');
 
 class AbstractGenerator {
     // the abstract class of generator

@@ -17,6 +17,6 @@
 
 ### run
 
-> -   node --max-old-space-size=8192 .\main.js {your Template name}
+> -   node --max-old-space-size=8192 .\main.js {your Template name} {output file type}
 
 ### node function
