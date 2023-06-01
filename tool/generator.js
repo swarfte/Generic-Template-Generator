@@ -86,15 +86,18 @@ class jsonGenerator extends AbstractGenerator {
         if (str.length < 524288000) { //  the maximum size of string is 512MB , so we set the threshold to 500MB
             return [str, count];
         }
+
+        // remove the last comma and \n in the string , add the right bracket
+        str = str.substring(0, str.length - 2);
+        str += "]";
         // write the string in the json file
         let filename = "./output/" + this.originalTemplatePath + "_" + count + ".json";
         fs.writeFile(filename, str, (err) => {
             if (err) {
                 throw err;
             }
-            console.log("JSON partition data is saved.");
         });
-        return ["", count + 1];
+        return ["[", count + 1];
     }
 
     saveOutput(originalTemplatePath, output) {
@@ -111,7 +114,7 @@ class jsonGenerator extends AbstractGenerator {
                 );
             }
             [outputData, count] = this.validString(outputData, count);
-            outputData += JSON.stringify(output[index], null, 4) + ",";
+            outputData += JSON.stringify(output[index], null, 4) + "," + "\n";
         }
         outputData += JSON.stringify(output[output.length - 1], null, 4) + "]";
 
