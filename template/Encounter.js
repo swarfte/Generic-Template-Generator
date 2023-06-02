@@ -11,7 +11,7 @@ class Template extends AbstractTemplate {
     static templateConfig = {
         source: {
             admission: "admissions.csv",
-            location: "Location.ndjson",
+            location: "location.ndjson",
             transfer: "transfers.csv",
         },
         primaryTable: "admission",

@@ -21,6 +21,13 @@
 > -   e.g. node --max-old-space-size=8192 main.js Location json
 
 ### merge partion file
->- python merge.py {you partion file name} {file extension}
->- e.g. python merge.py Location json
+
+> -   python merge.py {you partion file name} {file extension}
+> -   e.g. python merge.py Location json
+
+### get demo(3 json objects) from full file
+
+> -   python demo.py {your full file name} {file extension}
+> -   e.g. python demo.py Location json
+
 ### node function
