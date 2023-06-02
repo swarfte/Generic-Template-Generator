@@ -25,9 +25,9 @@
 > -   python merge.py {you partion file name} {file extension}
 > -   e.g. python merge.py Location json
 
-### get demo(3 json objects) from full file
+### get demo from full file (default number_of_demo = 3)
 
-> -   python demo.py {your full file name} {file extension}
+> -   python demo.py {your full file name} {file extension} [number of demo]
 > -   e.g. python demo.py Location json
 
 ### node function
