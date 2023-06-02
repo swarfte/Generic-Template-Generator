@@ -2,9 +2,6 @@ import json
 import os
 import sys
 
-file_name = sys.argv[1]
-file_extension = sys.argv[2]
-
 
 class AbstractMerge(object):
     def __init__(self, file_name: str, file_extension: str) -> None:
@@ -120,4 +117,9 @@ class csvMerge(AbstractMerge):
         file.writelines(self.output_data)
 
 
-eval(f"{file_extension}Merge(file_name, file_extension)")
+if __name__ == "__main__":
+
+    file_name = sys.argv[1]
+    file_extension = sys.argv[2]
+
+    eval(f"{file_extension}Merge(file_name, file_extension)")
