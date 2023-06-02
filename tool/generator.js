@@ -136,21 +136,43 @@ class ndjsonGenerator extends AbstractGenerator {
         super(templateName);
     }
 
-    saveOutput(originalTemplatePath, output) {
-        let outData = "";
-        for (const record of output) {
-            outData += JSON.stringify(record) + "\n";
-        }
-        fs.writeFile(
-            "./output/" + originalTemplatePath + ".ndjson",
-            outData,
-            (err) => {
+    validString(str, count) {
+        if (str.length < 524288000) {
+            //  the maximum size of string is 512MB , so we set the threshold to 500MB
+            return [str, count];
+        } else {
+            let filename =
+                "./output/" +
+                this.originalTemplatePath +
+                "_" +
+                count +
+                ".ndjson";
+            fs.writeFile(filename, str, (err) => {
                 if (err) {
                     throw err;
                 }
-                console.log("NDJSON data is saved.");
+            });
+            return ["", count + 1];
+        }
+    }
+
+    saveOutput(originalTemplatePath, output) {
+        let outData = "";
+        let count = 0;
+        for (const record of output) {
+            [outData, count] = this.validString(outData, count);
+            outData += JSON.stringify(record) + "\n";
+        }
+        let outputPath =
+            count === 0
+                ? "./output/" + originalTemplatePath + ".ndjson"
+                : "./output/" + originalTemplatePath + "_" + count + ".ndjson";
+        fs.writeFile(outputPath, outData, (err) => {
+            if (err) {
+                throw err;
             }
-        );
+            console.log("NDJSON data is saved.");
+        });
     }
 }
 
