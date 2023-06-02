@@ -4,8 +4,8 @@
 
 ### setup
 
-> -   create the output and source folder
-> -   install all needed packages via npm
+> -   npm install
+> -   node main.py
 
 ### create template
 
