@@ -16,6 +16,7 @@ class AbstractGenerator {
 
         this.database = {}; // the input data (database) include all the data that within the template source
         this.output = []; // the output data
+        this.console_pre_show = 20000; // each {console_pre_show} time show the schedule in the console
     }
 
     getFilenameExtension(fileName) {
@@ -37,7 +38,7 @@ class AbstractGenerator {
         let currentIndex = 0;
         const primaryData = database[templatePrimaryTable].getData();
         for (const record of primaryData) {
-            if (currentIndex % 10000 === 0) {
+            if (currentIndex % this.console_pre_show === 0) {
                 // show the current schedule
                 console.log(
                     `current generate percentage: ${
@@ -61,7 +62,7 @@ class AbstractGenerator {
 
     saveOutput(originalTemplatePath, output) {
         // save the output data to the file
-    } 
+    }
 
     run() {
         // the main function of the generator
@@ -83,7 +84,8 @@ class jsonGenerator extends AbstractGenerator {
     }
 
     validString(str, count) {
-        if (str.length < 524288000) { //  the maximum size of string is 512MB , so we set the threshold to 500MB
+        if (str.length < 524288000) {
+            //  the maximum size of string is 512MB , so we set the threshold to 500MB
             return [str, count];
         }
 
@@ -91,7 +93,8 @@ class jsonGenerator extends AbstractGenerator {
         str = str.substring(0, str.length - 2);
         str += "]";
         // write the string in the json file
-        let filename = "./output/" + this.originalTemplatePath + "_" + count + ".json";
+        let filename =
+            "./output/" + this.originalTemplatePath + "_" + count + ".json";
         fs.writeFile(filename, str, (err) => {
             if (err) {
                 throw err;
@@ -101,16 +104,13 @@ class jsonGenerator extends AbstractGenerator {
     }
 
     saveOutput(originalTemplatePath, output) {
-
         let outputData = "[";
         let count = 0;
         for (let index = 0; index < output.length - 1; index++) {
-            if (index % 10000 === 0) {
+            if (index % this.console_pre_show === 0) {
                 // show the current schedule
                 console.log(
-                    `current save percentage: ${
-                        (index / output.length) * 100
-                    }%`
+                    `current save percentage: ${(index / output.length) * 100}%`
                 );
             }
             [outputData, count] = this.validString(outputData, count);
@@ -118,18 +118,16 @@ class jsonGenerator extends AbstractGenerator {
         }
         outputData += JSON.stringify(output[output.length - 1], null, 4) + "]";
 
-        let outputPath = count === 0 ? "./output/" + originalTemplatePath + ".json" : "./output/" + originalTemplatePath + "_" + count + ".json";
-        fs.writeFile(
-            outputPath,
-            outputData,
-            (err) => {
-                if (err) {
-                    throw err;
-                }
-                console.log("JSON data is saved.");
+        let outputPath =
+            count === 0
+                ? "./output/" + originalTemplatePath + ".json"
+                : "./output/" + originalTemplatePath + "_" + count + ".json";
+        fs.writeFile(outputPath, outputData, (err) => {
+            if (err) {
+                throw err;
             }
-        );
-
+            console.log("JSON data is saved.");
+        });
     }
 }
 
