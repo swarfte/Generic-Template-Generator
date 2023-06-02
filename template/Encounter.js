@@ -1,3 +1,10 @@
+const {
+    BasicNode,
+    ObjectNode,
+    ArrayNode,
+    StringNode,
+} = require("../tool/elements.js");
+
 const AbstractTemplate = require("../tool/template.js")["AbstractTemplate"];
 
 class Template extends AbstractTemplate {
@@ -98,8 +105,64 @@ class Template extends AbstractTemplate {
             reference: new StringNode("Organization_1194052720"),
         });
         this.extension = new ObjectNode({
-
-        })
+            deathtime: new BasicNode("admission", "deathtime"),
+            insurance: new BasicNode("admission", "insurance"),
+            language: new BasicNode("admission", "language"),
+            marital_status: new BasicNode("admission", "marital_status"),
+            race: new BasicNode("admission", "race"),
+            edregtime: new BasicNode("admission", "edregtime"),
+            edouttime: new BasicNode("admission", "edouttime"),
+            hospital_expire_flag: new BasicNode(
+                "admission",
+                "hospital_expire_flag"
+            ),
+        });
+        this.null = new ArrayNode([
+            new StringNode("status"),
+            new StringNode("type"),
+            new StringNode("serviceType"),
+            new StringNode("subjectStatus"),
+            new StringNode("episodeOfCare"),
+            new StringNode("basedOn"),
+            new ObjectNode({
+                participant: new ArrayNode([
+                    new StringNode("type"),
+                    new StringNode("period"),
+                    new StringNode("actor"),
+                ]),
+            }),
+            new StringNode("appointment"),
+            new StringNode("virtualService"),
+            new StringNode("actualPeriod"),
+            new StringNode("plannedStartDate"),
+            new StringNode("plannedEndDate"),
+            new StringNode("length"),
+            new ObjectNode({
+                reason: new ArrayNode([
+                    new StringNode("use"),
+                    new StringNode("value"),
+                ]),
+            }),
+            new ObjectNode({
+                diagonsis: new ArrayNode([
+                    new StringNode("condition"),
+                    new StringNode("use"),
+                ]),
+            }),
+            new StringNode("account"),
+            new StringNode("dietPreference"),
+            new StringNode("specialArrangement"),
+            new StringNode("specialCourtesy"),
+            new ObjectNode({
+                admission: new ArrayNode([
+                    new StringNode("preAdmissionIdentifier"),
+                    new StringNode("origin"),
+                    new StringNode("reAdmission"),
+                    new StringNode("destination"),
+                    new StringNode("dischargeDisposition"),
+                ]),
+            }),
+        ]);
     }
 }
 
