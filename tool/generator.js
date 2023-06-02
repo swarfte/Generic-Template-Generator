@@ -60,7 +60,8 @@ class AbstractGenerator {
     }
 
     saveOutput(originalTemplatePath, output) {
-    } // save the output data to the file
+        // save the output data to the file
+    } 
 
     run() {
         // the main function of the generator

@@ -17,6 +17,10 @@
 
 ### run
 
-> -   node --max-old-space-size=8192 .\main.js {your Template name} {output file type}
+> -   node --max-old-space-size=8192 main.js {your Template name} {output file extension}
+> -   e.g. node --max-old-space-size=8192 main.js Location json
 
+### merge partion file
+>- python merge.py {you partion file name} {file extension}
+>- e.g. python merge.py Location json
 ### node function
