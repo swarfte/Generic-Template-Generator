@@ -1,5 +1,5 @@
 const fs = require("fs");
-
+const XLSX = require("xlsx");
 class AbstractGenerator {
     // the abstract class of generator
     constructor(templateName) {
@@ -182,6 +182,7 @@ class csvGenerator extends AbstractGenerator {
     }
 
     saveOutput(originalTemplatePath, output) {
+        // this function can be optimized the performance
         let csvData = [];
         let columnName = [];
         for (const key of Object.keys(output[0])) {
@@ -213,11 +214,40 @@ class csvGenerator extends AbstractGenerator {
     }
 }
 
+class xlsxGenerator extends AbstractGenerator {
+    constructor(templateName) {
+        super(templateName);
+    }
+
+    saveOutput(originalTemplatePath, output) {
+        console.log("saving xlsx file");
+        const workbook = XLSX.utils.book_new();
+        const columnName = [];
+        const worksheetData = [];
+        for (const key of Object.keys(output[0])) {
+            columnName.push(key);
+        }
+        worksheetData.push(columnName);
+        for (const record of output) {
+            let row = [];
+            for (const value of Object.values(record)) {
+                row.push(JSON.stringify(value));
+            }
+            worksheetData.push(row);
+        }
+        const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+        XLSX.writeFile(workbook, "./output/" + originalTemplatePath + ".xlsx");
+        console.log("XLSX data is saved.");
+    }
+}
+
 const moduleList = {
     AbstractGenerator,
     jsonGenerator,
     ndjsonGenerator,
     csvGenerator,
+    xlsxGenerator,
 };
 
 class ImportModule {

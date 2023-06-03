@@ -19,6 +19,7 @@
     "dependencies": {
         "csv-parser": "^3.0.0",
         "fs": "^0.0.1-security",
-        "ndjson": "^2.0.0"
+        "ndjson": "^2.0.0",
+        "xlsx": "^0.18.5"
     }
 }
