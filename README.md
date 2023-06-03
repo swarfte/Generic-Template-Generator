@@ -5,7 +5,7 @@
 ### setup
 
 > -   npm install
-> -   node main.py
+> -   node main.js
 
 ### create template
 
@@ -16,6 +16,11 @@
 > -   use the node to construct the template according to your customer need
 
 ### run
+
+> -   node main.js {your Template name} {output file extension}
+> -   e.g. node main.js Location json
+
+### run for big file
 
 > -   node --max-old-space-size=8192 main.js {your Template name} {output file extension}
 > -   e.g. node --max-old-space-size=8192 main.js Location json
