@@ -4,7 +4,7 @@ class Template extends AbstractTemplate {
     // this is the template for Testing purpose
     static templateConfig = {
         source: {
-            patient: "Patient.json",
+            patient: "Patient_demo.csv",
         },
         primaryTable: "patient",
     };

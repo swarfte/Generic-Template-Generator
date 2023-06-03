@@ -1,6 +1,7 @@
 const fs = require("fs");
 const csv = require("csv-parser");
 const ndjson = require("ndjson");
+const XLSX = require("xlsx");
 
 class AbstractAdapter {
     // the abstract adapter for different file type
@@ -52,7 +53,6 @@ class csvAdapter extends AbstractAdapter {
         csv()
             .on("data", (data) => results.push(data))
             .write(fileData);
-
         return results;
     }
 }
@@ -85,7 +85,22 @@ class jsonAdapter extends AbstractAdapter {
         const fileData = fs.readFileSync(filename, "utf8");
         return JSON.parse(fileData);
     }
+}
 
+class xlsxAdapter extends AbstractAdapter {
+    constructor(filename) {
+        super(filename);
+        this.data = this.transformDate(this.fileName);
+    }
+
+    transformDate(filename) {
+        const workbook = XLSX.readFile(filename);
+        const sheet_name_list = workbook.SheetNames;
+        const xlsxData = XLSX.utils.sheet_to_json(
+            workbook.Sheets[sheet_name_list[0]]
+        );
+        return xlsxData;
+    }
 }
 
 module.exports = {
@@ -93,4 +108,5 @@ module.exports = {
     csvAdapter,
     ndjsonAdapter,
     jsonAdapter,
+    xlsxAdapter,
 };
