@@ -2,6 +2,7 @@ const fs = require("fs");
 const csv = require("csv-parser");
 const ndjson = require("ndjson");
 const XLSX = require("xlsx");
+const xml2js = require("xml2js");
 
 class AbstractAdapter {
     // the abstract adapter for different file type
@@ -103,10 +104,42 @@ class xlsxAdapter extends AbstractAdapter {
     }
 }
 
+class xmlAdapter extends AbstractAdapter {
+    constructor(filename) {
+        super(filename);
+        this.data = this.transformDate(this.fileName);
+    }
+
+    transformDate(filename) {
+        // return a array of object
+        const data = fs.readFileSync(filename, "utf8");
+        const parser = new xml2js.Parser();
+        let xmlData = null;
+        parser.parseString(data, (err, result) => {
+            if (err) {
+                throw err;
+            }
+            xmlData = result;
+        });
+        const recordName = Object.values(xmlData)[0];
+        const array = Object.values(recordName)[0];
+        array.forEach((element) => {
+            for (const [key, value] of Object.entries(element)) {
+                if (value instanceof Array) {
+                    // change the value to original type (string)
+                    element[key] = value[0];
+                }
+            }
+        });
+        return array;
+    }
+}
+
 module.exports = {
     AbstractAdapter,
     csvAdapter,
     ndjsonAdapter,
     jsonAdapter,
     xlsxAdapter,
+    xmlAdapter,
 };
