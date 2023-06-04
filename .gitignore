@@ -2,3 +2,4 @@ source
 output
 node_modules
 .idea
+.vscode

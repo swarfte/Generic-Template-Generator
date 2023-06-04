@@ -1,5 +1,7 @@
 const fs = require("fs");
 const XLSX = require("xlsx");
+const xml2js = require("xml2js");
+
 class AbstractGenerator {
     // the abstract class of generator
     constructor(templateName) {
@@ -113,7 +115,7 @@ class jsonGenerator extends AbstractGenerator {
                     `current save percentage: ${(index / output.length) * 100}%`
                 );
             }
-            [outputData, count] = this.validString(outputData, count);
+            [outputData, count] = this.validString(outputData, count); // for big data , we write it in a file each 500 MB
             outputData += JSON.stringify(output[index], null, 4) + "," + "\n";
         }
         outputData += JSON.stringify(output[output.length - 1], null, 4) + "]";
@@ -160,7 +162,7 @@ class ndjsonGenerator extends AbstractGenerator {
         let outData = "";
         let count = 0;
         for (const record of output) {
-            [outData, count] = this.validString(outData, count);
+            [outData, count] = this.validString(outData, count); // for big data , we need to save the data in the file when the size of string is bigger than 500MB
             outData += JSON.stringify(record) + "\n";
         }
         let outputPath =
@@ -242,12 +244,38 @@ class xlsxGenerator extends AbstractGenerator {
     }
 }
 
+class xmlGenerator extends AbstractGenerator {
+    constructor(templateName) {
+        super(templateName);
+    }
+
+    saveOutput(originalTemplatePath, output) {
+        const builder = new xml2js.Builder();
+        const xml = builder.buildObject({
+            data: {
+                record: output,
+            },
+        });
+        fs.writeFile(
+            "./output/" + originalTemplatePath + ".xml",
+            xml,
+            (err) => {
+                if (err) {
+                    throw err;
+                }
+                console.log("XML data is saved.");
+            }
+        );
+    }
+}
+
 const moduleList = {
     AbstractGenerator,
     jsonGenerator,
     ndjsonGenerator,
     csvGenerator,
     xlsxGenerator,
+    xmlGenerator,
 };
 
 class ImportModule {
