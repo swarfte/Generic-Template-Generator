@@ -1,10 +1,3 @@
-const {
-    BasicNode,
-    ArithmeticNode,
-    NumberNode,
-    DecorateNode,
-} = require("../tool/elements.js");
-
 var AbstractTemplate = require("../tool/template.js")["AbstractTemplate"];
 
 class Template extends AbstractTemplate {
