@@ -453,7 +453,7 @@ class ImportModule {
         for (const [key, value] of Object.entries(
             ImportModule.importModuleList
         )) {
-            global[key] = value;
+            global[key] = value; // import the module to the global scope
         }
         return ImportModule.importModuleList;
     }

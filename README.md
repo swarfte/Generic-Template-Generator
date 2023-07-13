@@ -56,7 +56,7 @@
 -   the abstract class of all structure node , the structure node is the node that contain other node in the template
     > -   ArrayNode(array) -> Array
     > -   ObjectNode(object) -> Object
-    > -   ConcatenationNode(array) -> String
+    > -   ConcatenateNode(array) -> String
     > -   ArithmeticNode(array) -> Number
     > -   DecorateNode(node) -> AbstractNode
 
