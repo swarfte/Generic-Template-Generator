@@ -1,0 +1,233 @@
+[
+    {
+        "resourceType": "Procedure",
+        "identifier": [
+            {
+                "system": "http://fhir.mimic.mit.edu/identifier/procedure",
+                "value": "25136165-4-3891"
+            }
+        ],
+        "status": "completed",
+        "statusReason": "FinishedRunning",
+        "category": "Ventilation",
+        "code": {
+            "coding": [
+                {
+                    "system": "http://fhir.mimic.mit.edu/CodeSystem/procedure-icd9",
+                    "code": "3891"
+                }
+            ]
+        },
+        "subject": {
+            "reference": "Patient_14316472"
+        },
+        "encounter": {
+            "reference": "Encounter_25136165"
+        },
+        "location": "",
+        "extension": {
+            "chartdate": "2154-09-08"
+        },
+        "null": [
+            "instantiatesCanonical",
+            "instantiatesUri",
+            "basedOn",
+            "partOf",
+            "focus",
+            {
+                "occurrence": [
+                    "occurrenceDateTime",
+                    "occurrencePeriod",
+                    "occurrenceString",
+                    "occurrenceAge",
+                    "occurrenceRange",
+                    "occurrenceTiming"
+                ]
+            },
+            "recorded",
+            "recorder",
+            {
+                "reported": [
+                    "reportedBoolean",
+                    "reportedReference"
+                ]
+            },
+            {
+                "performer": [
+                    "function",
+                    "actor",
+                    "onBehalfOf",
+                    "period"
+                ]
+            },
+            "reason",
+            "bodySite",
+            "outcome",
+            "complication",
+            "followUp",
+            "note",
+            {
+                "focalDevice": [
+                    "action",
+                    "manipulated"
+                ]
+            },
+            "used",
+            "supportingInfo"
+        ]
+    },
+    {
+        "resourceType": "Procedure",
+        "identifier": [
+            {
+                "system": "http://fhir.mimic.mit.edu/identifier/procedure",
+                "value": "25136165-5-3893"
+            }
+        ],
+        "status": "completed",
+        "statusReason": "FinishedRunning",
+        "category": "Ventilation",
+        "code": {
+            "coding": [
+                {
+                    "system": "http://fhir.mimic.mit.edu/CodeSystem/procedure-icd9",
+                    "code": "3893"
+                }
+            ]
+        },
+        "subject": {
+            "reference": "Patient_14316472"
+        },
+        "encounter": {
+            "reference": "Encounter_25136165"
+        },
+        "location": "",
+        "extension": {
+            "chartdate": "2154-09-08"
+        },
+        "null": [
+            "instantiatesCanonical",
+            "instantiatesUri",
+            "basedOn",
+            "partOf",
+            "focus",
+            {
+                "occurrence": [
+                    "occurrenceDateTime",
+                    "occurrencePeriod",
+                    "occurrenceString",
+                    "occurrenceAge",
+                    "occurrenceRange",
+                    "occurrenceTiming"
+                ]
+            },
+            "recorded",
+            "recorder",
+            {
+                "reported": [
+                    "reportedBoolean",
+                    "reportedReference"
+                ]
+            },
+            {
+                "performer": [
+                    "function",
+                    "actor",
+                    "onBehalfOf",
+                    "period"
+                ]
+            },
+            "reason",
+            "bodySite",
+            "outcome",
+            "complication",
+            "followUp",
+            "note",
+            {
+                "focalDevice": [
+                    "action",
+                    "manipulated"
+                ]
+            },
+            "used",
+            "supportingInfo"
+        ]
+    },
+    {
+        "resourceType": "Procedure",
+        "identifier": [
+            {
+                "system": "http://fhir.mimic.mit.edu/identifier/procedure",
+                "value": "25136165-6-8872"
+            }
+        ],
+        "status": "completed",
+        "statusReason": "FinishedRunning",
+        "category": "Ventilation",
+        "code": {
+            "coding": [
+                {
+                    "system": "http://fhir.mimic.mit.edu/CodeSystem/procedure-icd9",
+                    "code": "8872"
+                }
+            ]
+        },
+        "subject": {
+            "reference": "Patient_14316472"
+        },
+        "encounter": {
+            "reference": "Encounter_25136165"
+        },
+        "location": "",
+        "extension": {
+            "chartdate": "2154-09-08"
+        },
+        "null": [
+            "instantiatesCanonical",
+            "instantiatesUri",
+            "basedOn",
+            "partOf",
+            "focus",
+            {
+                "occurrence": [
+                    "occurrenceDateTime",
+                    "occurrencePeriod",
+                    "occurrenceString",
+                    "occurrenceAge",
+                    "occurrenceRange",
+                    "occurrenceTiming"
+                ]
+            },
+            "recorded",
+            "recorder",
+            {
+                "reported": [
+                    "reportedBoolean",
+                    "reportedReference"
+                ]
+            },
+            {
+                "performer": [
+                    "function",
+                    "actor",
+                    "onBehalfOf",
+                    "period"
+                ]
+            },
+            "reason",
+            "bodySite",
+            "outcome",
+            "complication",
+            "followUp",
+            "note",
+            {
+                "focalDevice": [
+                    "action",
+                    "manipulated"
+                ]
+            },
+            "used",
+            "supportingInfo"
+        ]
+    }
+]
