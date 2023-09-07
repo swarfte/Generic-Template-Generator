@@ -30,6 +30,7 @@ class AbstractGenerator {
         for (const [key, value] of Object.entries(templateSource)) {
             let filenameExtension = this.getFilenameExtension(value);
             const adapterName = filenameExtension + "Adapter";
+            // dynamically import the adapter
             const adapter = require("../tool/adapters.js")[adapterName];
             database[key] = new adapter(value);
         }

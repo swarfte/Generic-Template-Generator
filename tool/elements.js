@@ -1,6 +1,7 @@
 const sortedDatabase = {
     // the sorted database
 };
+
 class AbstractNode {
     // the abstract class for all nde
     constructor(data) {
