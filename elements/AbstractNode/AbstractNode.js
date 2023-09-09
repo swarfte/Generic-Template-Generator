@@ -24,6 +24,8 @@ class AbstractNode {
      * @param {Object} value - the node of the template
      * @param {Object} record - the record of the primary table
      * @param {Object} database - contains all the records of all tables
+     * @abstract
+     * @returns {any} the data which is parsed by the node
      */
     parseNode(key, value, record, database) {
         if (

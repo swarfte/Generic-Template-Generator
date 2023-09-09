@@ -1,6 +1,6 @@
 /**
  * Database class that used for storing the data
- * @class
+ * @class Database
  */
 class Database {
     static sortedData = {};
