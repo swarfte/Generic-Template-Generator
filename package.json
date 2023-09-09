@@ -4,7 +4,8 @@
     "description": "transform the MIMIC-IV dataset to FHIR format",
     "main": "main.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "generate": "node --max-old-space-size=12288 main.js"
     },
     "repository": {
         "type": "git",
