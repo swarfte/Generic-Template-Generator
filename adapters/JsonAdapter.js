@@ -1,5 +1,5 @@
 const fs = require("fs");
-const { AbstractAdapter } = require("./AbstractAdapter");
+const { AbstractAdapter } = require("./AbstractAdapter.js");
 
 /**
  *  the adapter for json file type

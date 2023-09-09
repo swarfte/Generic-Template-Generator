@@ -1,6 +1,6 @@
 const fs = require("fs");
 const ndjson = require("ndjson");
-const { AbstractAdapter } = require("./AbstractAdapter");
+const { AbstractAdapter } = require("./AbstractAdapter.js");
 
 /**
  * the adapter for ndjson file type

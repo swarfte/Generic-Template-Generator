@@ -1,6 +1,6 @@
 const {
     AbstractDynamicRelationSearchNode,
-} = require("../AbstractNode/AbstractDynamicRelationSearchNode");
+} = require("../AbstractNode/AbstractDynamicRelationSearchNode.js");
 
 /**
  * @class SingleSearchNode

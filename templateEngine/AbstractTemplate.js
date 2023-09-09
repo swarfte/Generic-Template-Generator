@@ -1,7 +1,7 @@
 /**
- * @fileoverview the abstract class of template
+ * the abstract class of template
+ * @class
  * @abstract
- * @package
  */
 class AbstractTemplate {
     // the abstract class of template

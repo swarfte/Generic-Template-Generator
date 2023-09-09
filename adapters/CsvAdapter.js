@@ -1,4 +1,4 @@
-const { AbstractAdapter } = require("./AbstractAdapter");
+const { AbstractAdapter } = require("./AbstractAdapter.js");
 const csv = require("csv-parser");
 const fs = require("fs");
 

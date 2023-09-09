@@ -1,4 +1,4 @@
-const { MultipleSearchNode } = require("./MultipleSearchNode");
+const { MultipleSearchNode } = require("./MultipleSearchNode.js");
 const { BasicNode } = require("./BasicNode");
 /**
  * @class OneToManyNode

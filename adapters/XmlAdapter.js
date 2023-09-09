@@ -1,6 +1,6 @@
 const fs = require("fs");
 const xml2js = require("xml2js");
-const { AbstractAdapter } = require("./AbstractAdapter");
+const { AbstractAdapter } = require("./AbstractAdapter.js");
 
 /**
  * the adapter for xml file type

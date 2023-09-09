@@ -1,4 +1,6 @@
-const { AbstractDynamicNode } = require("./AbstractDynamicNode");
+const {
+    AbstractDynamicNode,
+} = require("../AbstractNode/AbstractDynamicNode.js");
 
 /**
  * @class BasicNode

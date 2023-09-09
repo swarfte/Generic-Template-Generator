@@ -1,6 +1,6 @@
 const {
     AbstractStructureNode,
-} = require("../AbstractNode/AbstractStructureNode");
+} = require("../AbstractNode/AbstractStructureNode.js");
 
 /**
  * @class DecorateNode

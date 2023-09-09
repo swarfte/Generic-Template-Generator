@@ -14,6 +14,8 @@ class AbstractGenerator {
         }
         this.originalTemplatePath = templateName; // the original template path
         this.templatePath = "../template/" + this.originalTemplatePath + ".js"; // the full path of the template
+
+        // dynamic import the template
         this.template = require(this.templatePath)["Template"]; // it is a template class , it is used to generate the data
         this.templateConfig = this.template.templateConfig; // the config used by generator
         this.templatePrimaryTable = this.templateConfig.primaryTable; // the primary table of this template

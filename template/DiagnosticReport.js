@@ -6,7 +6,7 @@ const {
     ConcatenateNode,
     BasicNode,
     OneToOneNode,
-} = require("../tool/elements.js");
+} = require("../elements/NodeList.js");
 
 const { AbstractTemplate } = require("../templateEngine/AbstractTemplate.js");
 

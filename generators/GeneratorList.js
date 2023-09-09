@@ -4,6 +4,14 @@ const { CsvGenerator } = require("./CsvGenerator.js");
 const { XlsxGenerator } = require("./XlsxGenerator.js");
 const { XmlGenerator } = require("./XmlGenerator.js");
 
+const generatorList = {
+    json: JsonGenerator,
+    ndjson: NdjsonGenerator,
+    csv: CsvGenerator,
+    xlsx: XlsxGenerator,
+    xml: XmlGenerator,
+};
+
 /**
  *  get the generator by the generator name
  * @param {String} formatType
@@ -11,20 +19,7 @@ const { XmlGenerator } = require("./XmlGenerator.js");
  */
 function getGenerator(formatType) {
     // used for getting the generator
-    switch (formatType) {
-        case "json":
-            return JsonGenerator;
-        case "ndjson":
-            return NdjsonGenerator;
-        case "csv":
-            return CsvGenerator;
-        case "xlsx":
-            return XlsxGenerator;
-        case "xml":
-            return XmlGenerator;
-        default:
-            throw new Error("The generator is not supported.");
-    }
+    return generatorList[formatType];
 }
 
 module.exports = {

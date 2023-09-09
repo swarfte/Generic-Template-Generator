@@ -1,4 +1,4 @@
-const { AbstractFixedNode } = require("./AbstractFixedNode");
+const { AbstractFixedNode } = require("../AbstractNode/AbstractFixedNode.js");
 
 /**
  * @class DateNode

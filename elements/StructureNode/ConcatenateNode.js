@@ -1,4 +1,6 @@
-const { AbstractStructureNode } = require("./AbstractStructureNode.js");
+const {
+    AbstractStructureNode,
+} = require("../AbstractNode/AbstractStructureNode.js");
 
 /**
  * @class ConcatenateNode

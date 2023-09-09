@@ -1,4 +1,9 @@
-const { StringNode, DecorateNode, BasicNode } = require("../tool/elements.js");
+const {
+    StringNode,
+    DecorateNode,
+    BasicNode,
+} = require("../elements/NodeList.js");
+
 const { AbstractTemplate } = require("../templateEngine/AbstractTemplate.js");
 
 class Template extends AbstractTemplate {

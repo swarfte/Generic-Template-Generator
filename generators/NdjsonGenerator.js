@@ -1,4 +1,4 @@
-const { AbstractGenerator } = require("./AbstractGenerator");
+const { AbstractGenerator } = require("./AbstractGenerator.js");
 const fs = require("fs");
 /**
  * the generator for ndjson file

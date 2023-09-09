@@ -1,5 +1,5 @@
 const XLSX = require("xlsx");
-const { AbstractAdapter } = require("./AbstractAdapter");
+const { AbstractAdapter } = require("./AbstractAdapter.js");
 
 /**
  * the adapter for xlsx file type
