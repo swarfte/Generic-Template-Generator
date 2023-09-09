@@ -7,7 +7,7 @@ const {
     DecorateNode,
     OneToOneNode,
     ArrayNode,
-} = require("../tool/elements.js");
+} = require("../elements/NodeList.js");
 
 class Template extends AbstractTemplate {
     static templateConfig = {

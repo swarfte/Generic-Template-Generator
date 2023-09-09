@@ -5,7 +5,8 @@
     "main": "main.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "generate": "node --max-old-space-size=12288 main.js"
+        "server-run": "node --max-old-space-size=32768 main.js",
+        "client-run": "node --max-old-space-size=10240 main.js"
     },
     "repository": {
         "type": "git",

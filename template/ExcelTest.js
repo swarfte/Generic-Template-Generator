@@ -3,7 +3,7 @@ const {
     BasicNode,
     DecorateNode,
     ArithmeticNode,
-} = require("../tool/elements.js");
+} = require("../elements/NodeList.js");
 
 class Template extends AbstractTemplate {
     // this is the template for Testing purpose

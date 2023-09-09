@@ -5,9 +5,6 @@
  */
 class AbstractTemplate {
     // the abstract class of template
-
-    // for dynamically import the module
-    static nodeModule = require("../tool/elements.js")["ImportModule"].load();
     /**
      * the template config
      * @type {Object}
