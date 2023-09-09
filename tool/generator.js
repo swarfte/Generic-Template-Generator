@@ -2,14 +2,35 @@ const fs = require("fs");
 const XLSX = require("xlsx");
 const xml2js = require("xml2js");
 
+const {
+    csvAdapter,
+    xlsxAdapter,
+    xmlAdapter,
+    jsonAdapter,
+    ndjsonAdapter,
+} = require("./adapters.js");
+
+/**
+ * the abstract class of generator
+ * @abstract
+ * @class AbstractGenerator
+ */
 class AbstractGenerator {
-    // the abstract class of generator
     constructor(templateName) {
         if (this.constructor === AbstractGenerator) {
             throw new TypeError(
                 "Abstract class 'AbstractGenerator' cannot be instantiated directly."
             );
         }
+
+        this.AdaptersList = {
+            csv: csvAdapter,
+            xlsx: xlsxAdapter,
+            xml: xmlAdapter,
+            json: jsonAdapter,
+            ndjson: ndjsonAdapter,
+        };
+
         this.originalTemplatePath = templateName; // the original template path
         this.templatePath = "../template/" + this.originalTemplatePath + ".js"; // the full path of the template
         this.template = require(this.templatePath)["Template"]; // it is a template class , it is used to generate the data
@@ -21,23 +42,39 @@ class AbstractGenerator {
         this.console_pre_show = 20000; // each {console_pre_show} time show the schedule in the console
     }
 
+    /**
+     * get the file extension of the file
+     * @param {String} fileName
+     * @returns {String}
+     */
     getFilenameExtension(fileName) {
         return fileName.split(".")[1];
     }
 
+    /**
+     *
+     * @param {Object} database - the database
+     * @param {Object} templateSource - the template source
+     */
     initializeDatabase(database, templateSource) {
         // initialize the database according to the template source
         for (const [key, value] of Object.entries(templateSource)) {
             let filenameExtension = this.getFilenameExtension(value);
-            const adapterName = filenameExtension + "Adapter";
-            // dynamically import the adapter
-            const adapter = require("../tool/adapters.js")[adapterName];
+
+            // static import the adapter
+            const adapter = this.AdaptersList[filenameExtension];
             database[key] = new adapter(value);
         }
     }
 
+    /**
+     *  generate the data according to the template element
+     * @param {Object} database - the database
+     * @param {String} templatePrimaryTable - the primary table of custom template config
+     * @param {Object} template - the template which defined in the custom template
+     * @param {Object[]} output - the output data
+     */
     generateData(database, templatePrimaryTable, template, output) {
-        // generate the data according to the template element
         let currentIndex = 0;
         const primaryData = database[templatePrimaryTable].getData();
         for (const record of primaryData) {
@@ -63,12 +100,21 @@ class AbstractGenerator {
         }
     }
 
-    saveOutput(originalTemplatePath, output) {
-        // save the output data to the file
-    }
+    /**
+     *
+     *  save the output data to the file
+     * @param {String} originalTemplatePath
+     * @param {Array} output
+     * @abstract
+     * @memberof AbstractGenerator
+     */
+    saveOutput(originalTemplatePath, output) {}
 
+    /**
+     * the main function of the generator
+     * @abstract
+     */
     run() {
-        // the main function of the generator
         this.initializeDatabase(this.database, this.templateConfig.source);
         this.generateData(
             this.database,
@@ -80,15 +126,24 @@ class AbstractGenerator {
     }
 }
 
+/**
+ * the generator for json file
+ * @class jsonGenerator
+ * @extends {AbstractGenerator}
+ */
 class jsonGenerator extends AbstractGenerator {
-    // the generator for json file
     constructor(templateName) {
         super(templateName);
     }
 
+    /**
+     * check the size of string , if the size of string is bigger than 500MB , we write the string in a file
+     * @param {String} str
+     * @param {Number} count
+     * @returns {Array}
+     */
     validString(str, count) {
         if (str.length < 524288000) {
-            //  the maximum size of string is 512MB , so we set the threshold to 500MB
             return [str, count];
         }
 
@@ -106,6 +161,11 @@ class jsonGenerator extends AbstractGenerator {
         return ["[", count + 1];
     }
 
+    /**
+     * save the output data to the json file
+     * @param {String} originalTemplatePath
+     * @param {Object[]} output
+     */
     saveOutput(originalTemplatePath, output) {
         let outputData = "[";
         let count = 0;
@@ -134,11 +194,22 @@ class jsonGenerator extends AbstractGenerator {
     }
 }
 
+/**
+ * the generator for ndjson file
+ * @class ndjsonGenerator
+ * @extends {AbstractGenerator}
+ */
 class ndjsonGenerator extends AbstractGenerator {
     constructor(templateName) {
         super(templateName);
     }
 
+    /**
+     *  check the size of string , if the size of string is bigger than 500MB , we write the string in a file
+     * @param {String} str
+     * @param {Number} count
+     * @returns {Array}
+     */
     validString(str, count) {
         if (str.length < 524288000) {
             //  the maximum size of string is 512MB , so we set the threshold to 500MB
@@ -159,6 +230,11 @@ class ndjsonGenerator extends AbstractGenerator {
         }
     }
 
+    /**
+     * save the output data to the ndjson file
+     * @param {String} originalTemplatePath
+     * @param {Object[]} output
+     */
     saveOutput(originalTemplatePath, output) {
         let outData = "";
         let count = 0;
@@ -179,13 +255,23 @@ class ndjsonGenerator extends AbstractGenerator {
     }
 }
 
+/**
+ * the generator for csv file
+ * @class csvGenerator
+ * @extends {AbstractGenerator}
+ */
 class csvGenerator extends AbstractGenerator {
     constructor(templateName) {
         super(templateName);
     }
 
+    /**
+     *  save the output data to the csv file
+     * @param {String} originalTemplatePath
+     * @param {Object[]} output
+     */
     saveOutput(originalTemplatePath, output) {
-        // this function can be optimized the performance
+        // There are areas where this function can be optimized
         let csvData = [];
         let columnName = [];
         for (const key of Object.keys(output[0])) {
@@ -217,11 +303,21 @@ class csvGenerator extends AbstractGenerator {
     }
 }
 
+/**
+ * the generator for xlsx file
+ * @class xlsxGenerator
+ * @extends {AbstractGenerator}
+ */
 class xlsxGenerator extends AbstractGenerator {
     constructor(templateName) {
         super(templateName);
     }
 
+    /**
+     *
+     * @param {String} originalTemplatePath
+     * @param {Object[]} output
+     */
     saveOutput(originalTemplatePath, output) {
         console.log("saving xlsx file");
         const workbook = XLSX.utils.book_new();
@@ -245,11 +341,21 @@ class xlsxGenerator extends AbstractGenerator {
     }
 }
 
+/**
+ * the generator for xml file
+ * @class xmlGenerator
+ * @extends {AbstractGenerator}
+ */
 class xmlGenerator extends AbstractGenerator {
     constructor(templateName) {
         super(templateName);
     }
 
+    /**
+     * save the output data to the xml file
+     * @param {String} originalTemplatePath
+     * @param {Object[]} output
+     */
     saveOutput(originalTemplatePath, output) {
         const builder = new xml2js.Builder();
         const xml = builder.buildObject({
@@ -279,23 +385,4 @@ const moduleList = {
     xmlGenerator,
 };
 
-class ImportModule {
-    // this class is used to import the module to the global scope
-    static importModuleList = moduleList;
-
-    constructor() {
-        throw new Error("This class cannot be instantiated.");
-    }
-
-    static load() {
-        // use this method when require the elements.js
-        for (const [key, value] of Object.entries(
-            ImportModule.importModuleList
-        )) {
-            global[key] = value;
-        }
-    }
-}
-
 module.exports = moduleList;
-module.exports.ImportModule = ImportModule;

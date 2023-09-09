@@ -1,4 +1,9 @@
-var AbstractTemplate = require("../tool/template.js")["AbstractTemplate"];
+var { AbstractTemplate } = require("../tool/template.js");
+var {
+    BasicNode,
+    DecorateNode,
+    ArithmeticNode,
+} = require("../tool/elements.js");
 
 class Template extends AbstractTemplate {
     // this is the template for Testing purpose

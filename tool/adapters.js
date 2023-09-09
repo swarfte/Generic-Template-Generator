@@ -121,6 +121,11 @@ class xmlAdapter extends AbstractAdapter {
             }
             xmlData = result;
         });
+
+        if (xmlData === null) {
+            throw new Error("xmlData is null");
+        }
+
         const recordName = Object.values(xmlData)[0];
         const array = Object.values(recordName)[0];
         array.forEach((element) => {

@@ -1,21 +1,41 @@
 const fs = require("fs");
+const {
+    jsonGenerator,
+    ndjsonGenerator,
+    csvGenerator,
+    xlsxGenerator,
+    xmlGenerator,
+} = require("./tool/generator.js");
+
+function getGenerator(generatorName) {
+    // used for getting the generator
+    switch (generatorName) {
+        case "json":
+            return jsonGenerator;
+        case "ndjson":
+            return ndjsonGenerator;
+        case "csv":
+            return csvGenerator;
+        case "xlsx":
+            return xlsxGenerator;
+        case "xml":
+            return xmlGenerator;
+        default:
+            throw new Error("Invalid generator name.");
+    }
+}
 
 function generateTemplate() {
     // used for generating a template
     const templateName = process.argv.slice(2)[0]; // the first argument is the template name (without .js)
-    let generatorName = process.argv.slice(2)[1]; // the second argument is the generator format name (such as json, ndjson, csv)
-
-    if (generatorName === undefined) {
-        // the default generator format is json
-        generatorName = "json";
-    }
+    let generatorName = process.argv.slice(2)[1]; // the second argument is the generator format name (such as json,xlsx, csv)
 
     // dynamically import the generator
-    const Generator = require("./tool/generator.js")[
-        generatorName + "Generator"
-    ];
+    const GeneratorType = getGenerator(generatorName);
 
-    new Generator(templateName).run();
+    // run the generator
+    const Generator = new GeneratorType(templateName);
+    Generator.run();
 }
 
 function initializeEnvironment(folderList) {

@@ -1,21 +1,27 @@
-var AbstractTemplate = require("../tool/template.js")["AbstractTemplate"];
+const { StringNode, DecorateNode, BasicNode } = require("../tool/elements.js");
+const { AbstractTemplate } = require("../tool/template.js");
 
 class Template extends AbstractTemplate {
     // this is the template for Testing purpose
     static templateConfig = {
         source: {
-            book: "books.xml",
+            book: "books.json",
         },
         primaryTable: "book",
     };
     constructor() {
         super();
-        this.author = new BasicNode("book", "author");
+        this.resourceType = new StringNode("Book");
         this.title = new BasicNode("book", "title");
-        this.genre = new BasicNode("book", "genre");
-        this.price = new BasicNode("book", "price");
-        this.priceEvaluation = new DecorateNode(this.price, (price) =>
-            price < 10 ? "cheap" : "expensive"
+        this.type = new DecorateNode(new BasicNode("book", "page"), (page) =>
+            page > 100 ? "long" : "short"
+        );
+        this.author = new BasicNode("book", "author");
+        this.country = new BasicNode("book", "country");
+        this.language = new BasicNode("book", "language");
+        this.existYear = new DecorateNode(
+            new BasicNode("book", "year"),
+            (year) => (2023 - year).toString()
         );
     }
 }

@@ -232,6 +232,7 @@ class AbstractDynamicRelationNode extends AbstractDynamicNode {
         if (this.constructor === AbstractDynamicRelationNode) {
             throw new Error("Abstract classes can't be instantiated.");
         }
+        this.sorted = false; // whether the table is sorted
     }
     sortMethod(attribute) {
         // the sort method for the sorted database

@@ -1,4 +1,13 @@
-const AbstractTemplate = require("../tool/template.js")["AbstractTemplate"];
+const AbstractTemplate = require("../tool/template.js").AbstractTemplate;
+const {
+    StringNode,
+    ObjectNode,
+    BasicNode,
+    ConcatenateNode,
+    DecorateNode,
+    OneToOneNode,
+    ArrayNode,
+} = require("../tool/elements.js");
 
 class Template extends AbstractTemplate {
     static templateConfig = {

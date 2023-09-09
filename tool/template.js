@@ -1,7 +1,29 @@
+/**
+ * @fileoverview the abstract class of template
+ * @package
+ */
 class AbstractTemplate {
     // the abstract class of template
 
+    // for dynamically import the module
     static nodeModule = require("../tool/elements.js")["ImportModule"].load();
+
+    /**
+     * the template config
+     * @type {Object}
+     * @property {Object} source - the source files
+     * @property {string} primaryTable - the primary table of this template
+     * @static
+     * @memberof AbstractTemplate
+     * @example
+     * static templateConfig = {
+        source: {
+            patient: "patients.csv",
+            transfer: "transfers.csv",
+        },
+        primaryTable: "patient",
+    };
+     */
     static templateConfig = {
         // override the config by the custom template
         source: {}, // include all the source files , nickname : filename(only the filename and file extension)
