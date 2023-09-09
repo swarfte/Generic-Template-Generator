@@ -1,4 +1,4 @@
-const AbstractTemplate = require("../tool/template.js").AbstractTemplate;
+const { AbstractTemplate } = require("../templateEngine/AbstractTemplate.js");
 const {
     StringNode,
     ObjectNode,

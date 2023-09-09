@@ -1,5 +1,6 @@
 /**
  * @fileoverview the abstract class of template
+ * @abstract
  * @package
  */
 class AbstractTemplate {

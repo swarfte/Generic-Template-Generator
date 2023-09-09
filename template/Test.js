@@ -1,4 +1,4 @@
-const AbstractTemplate = require("../tool/template.js").AbstractTemplate;
+const { AbstractTemplate } = require("../templateEngine/AbstractTemplate.js");
 const { BasicNode } = require("../tool/elements.js");
 
 class Template extends AbstractTemplate {

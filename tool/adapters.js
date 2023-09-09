@@ -6,6 +6,7 @@ const xml2js = require("xml2js");
 
 /**
  * @fileoverview the abstract class of adapter
+ * @abstract
  * @package
  */
 class AbstractAdapter {

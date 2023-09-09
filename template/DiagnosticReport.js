@@ -8,7 +8,7 @@ const {
     OneToOneNode,
 } = require("../tool/elements.js");
 
-const { AbstractTemplate } = require("../tool/template.js");
+const { AbstractTemplate } = require("../templateEngine/AbstractTemplate.js");
 
 class Template extends AbstractTemplate {
     static templateConfig = {

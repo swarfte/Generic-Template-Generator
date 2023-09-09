@@ -1,5 +1,5 @@
-var { AbstractTemplate } = require("../tool/template.js");
-var {
+const { AbstractTemplate } = require("../templateEngine/AbstractTemplate.js");
+const {
     BasicNode,
     DecorateNode,
     ArithmeticNode,
