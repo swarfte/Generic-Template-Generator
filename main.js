@@ -2,6 +2,9 @@ const fs = require("fs");
 
 const { getGenerator } = require("./generators/GeneratorList");
 
+/**
+ * the abstract class for the adapter
+ */
 function generateTemplate() {
     // used for generating a template
     const templateName = process.argv.slice(2)[0]; // the first argument is the template name (without .js)
@@ -15,6 +18,11 @@ function generateTemplate() {
     Generator.run();
 }
 
+/**
+ *  initialize the environment
+ * @param {String[]} folderList
+ * @returns {Boolean}
+ */
 function initializeEnvironment(folderList) {
     let isInitialized = true;
     // used for create the directories if they don't exist
@@ -28,7 +36,14 @@ function initializeEnvironment(folderList) {
     return isInitialized;
 }
 
-const folderList = ["template", "source", "output", "demo"];
-if (initializeEnvironment(folderList)) {
-    generateTemplate();
+/**
+ * the main function
+ */
+function start() {
+    const folderList = ["template", "source", "output", "demo"];
+    if (initializeEnvironment(folderList)) {
+        generateTemplate();
+    }
 }
+
+start();
