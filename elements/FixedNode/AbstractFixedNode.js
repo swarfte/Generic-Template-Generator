@@ -15,6 +15,7 @@ class AbstractFixedNode extends AbstractNode {
 
     /**
      * the main function of the node , it is used to parse the data according to the node
+     * @override
      * @param {String} key - the attribute name of the template
      * @param {Object} value - the node of the template
      * @param {Object} record - the record of the primary table

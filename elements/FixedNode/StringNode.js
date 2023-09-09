@@ -1,7 +1,15 @@
 const { AbstractFixedNode } = require("./AbstractFixedNode");
 
+/**
+ * @class StringNode
+ * @description the node for string
+ * @extends {AbstractFixedNode}
+ */
 class StringNode extends AbstractFixedNode {
-    // the node for string
+    /**
+     *
+     * @param {String} data
+     */
     constructor(data) {
         super(data);
     }

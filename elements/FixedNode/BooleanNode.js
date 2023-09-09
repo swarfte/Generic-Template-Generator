@@ -1,12 +1,20 @@
 const { AbstractFixedNode } = require("./AbstractFixedNode");
 
+/**
+ * @class BooleanNode
+ * @description the node for boolean
+ * @extends {AbstractFixedNode}
+ */
 class BooleanNode extends AbstractFixedNode {
-    // the node for boolean
+    /**
+     *
+     * @param {boolean} data
+     */
     constructor(data) {
         super(data);
     }
     /**
-     *  @override
+     * @override
      * @returns {Boolean} the fixed data of the node
      */
     getData() {
