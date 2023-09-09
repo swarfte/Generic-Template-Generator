@@ -5,7 +5,6 @@ const xml2js = require("xml2js");
  * the generator for xml file
  * @class xmlGenerator
  * @extends {AbstractGenerator}
- * @package
  */
 class XmlGenerator extends AbstractGenerator {
     constructor(templateName) {

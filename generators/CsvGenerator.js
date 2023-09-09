@@ -5,7 +5,6 @@ const fs = require("fs");
  * the generator for csv file
  * @class csvGenerator
  * @extends {AbstractGenerator}
- * @package
  */
 class CsvGenerator extends AbstractGenerator {
     constructor(templateName) {

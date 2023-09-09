@@ -4,7 +4,6 @@ const fs = require("fs");
  * the generator for ndjson file
  * @class ndjsonGenerator
  * @extends {AbstractGenerator}
- * @package
  */
 class NdjsonGenerator extends AbstractGenerator {
     constructor(templateName) {

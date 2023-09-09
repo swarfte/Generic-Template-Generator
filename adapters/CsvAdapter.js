@@ -3,8 +3,9 @@ const csv = require("csv-parser");
 const fs = require("fs");
 
 /**
- * @fileoverview the adapter for csv file type
- * @package
+ *  the adapter for csv file type
+ * @class CsvAdapter
+ * @extends {AbstractAdapter}
  */
 class CsvAdapter extends AbstractAdapter {
     constructor(filename) {

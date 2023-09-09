@@ -5,7 +5,6 @@ const fs = require("fs");
  * the generator for json file
  * @class jsonGenerator
  * @extends {AbstractGenerator}
- * @module
  */
 class JsonGenerator extends AbstractGenerator {
     constructor(templateName) {

@@ -9,7 +9,6 @@ const {
 /**
  * the abstract class of generator
  * @abstract
- * @module
  * @class AbstractGenerator
  */
 class AbstractGenerator {

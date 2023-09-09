@@ -2,8 +2,9 @@ const XLSX = require("xlsx");
 const { AbstractAdapter } = require("./AbstractAdapter");
 
 /**
- * @fileoverview the adapter for xlsx file type
- * @package
+ * the adapter for xlsx file type
+ * @class XlsxAdapter
+ * @extends {AbstractAdapter}
  */
 class XlsxAdapter extends AbstractAdapter {
     constructor(filename) {

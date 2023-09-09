@@ -2,8 +2,9 @@ const fs = require("fs");
 const { AbstractAdapter } = require("./AbstractAdapter");
 
 /**
- * @fileoverview the adapter for json file type
- * @package
+ *  the adapter for json file type
+ * @class JsonAdapter
+ * @extends {AbstractAdapter}
  */
 class JsonAdapter extends AbstractAdapter {
     constructor(filename) {

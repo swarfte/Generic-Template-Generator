@@ -5,7 +5,6 @@ const XLSX = require("xlsx");
  * the generator for xlsx file
  * @class xlsxGenerator
  * @extends {AbstractGenerator}
- * @package
  */
 class XlsxGenerator extends AbstractGenerator {
     constructor(templateName) {

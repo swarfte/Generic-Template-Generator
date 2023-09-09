@@ -3,8 +3,9 @@ const xml2js = require("xml2js");
 const { AbstractAdapter } = require("./AbstractAdapter");
 
 /**
- * @fileoverview the adapter for xml file type
- * @package
+ * the adapter for xml file type
+ * @class XmlAdapter
+ * @extends {AbstractAdapter}
  */
 class XmlAdapter extends AbstractAdapter {
     constructor(filename) {

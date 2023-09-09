@@ -3,8 +3,9 @@ const ndjson = require("ndjson");
 const { AbstractAdapter } = require("./AbstractAdapter");
 
 /**
- * @fileoverview the adapter for ndjson file type
- * @package
+ * the adapter for ndjson file type
+ * @class NdjsonAdapter
+ * @extends {AbstractAdapter}
  */
 class NdjsonAdapter extends AbstractAdapter {
     // parse ndjson file
