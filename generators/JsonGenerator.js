@@ -38,6 +38,7 @@ class JsonGenerator extends AbstractGenerator {
 
     /**
      * save the output data to the json file
+     * @override
      * @param {String} originalTemplatePath
      * @param {Object[]} output
      */

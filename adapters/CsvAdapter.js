@@ -14,6 +14,7 @@ class CsvAdapter extends AbstractAdapter {
     }
     /**
      * transform the data to json format
+     * @override
      * @param {String} filename
      * @returns {Array} the parsed data
      */

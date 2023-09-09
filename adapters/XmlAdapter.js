@@ -14,7 +14,8 @@ class XmlAdapter extends AbstractAdapter {
     }
 
     /**
-     *
+     * it will parse the xml file
+     * @override
      * @param {String} filename
      * @returns {Array} the parsed data
      */

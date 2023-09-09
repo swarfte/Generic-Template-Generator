@@ -13,6 +13,7 @@ class CsvGenerator extends AbstractGenerator {
 
     /**
      *  save the output data to the csv file
+     * @override
      * @param {String} originalTemplatePath
      * @param {Object[]} output
      */

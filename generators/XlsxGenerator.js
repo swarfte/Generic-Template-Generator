@@ -12,7 +12,8 @@ class XlsxGenerator extends AbstractGenerator {
     }
 
     /**
-     *
+     * save the output data to the xlsx file
+     * @override
      * @param {String} originalTemplatePath
      * @param {Object[]} output
      */

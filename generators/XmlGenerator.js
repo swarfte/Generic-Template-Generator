@@ -13,6 +13,7 @@ class XmlGenerator extends AbstractGenerator {
 
     /**
      * save the output data to the xml file
+     * @override
      * @param {String} originalTemplatePath
      * @param {Object[]} output
      */

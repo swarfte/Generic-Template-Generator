@@ -13,7 +13,8 @@ class XlsxAdapter extends AbstractAdapter {
     }
 
     /**
-     *
+     * it will parse the xlsx file
+     * @override
      * @param {String} filename
      * @returns {Array} the parsed data
      */

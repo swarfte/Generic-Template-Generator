@@ -15,7 +15,8 @@ class NdjsonAdapter extends AbstractAdapter {
     }
 
     /**
-     *
+     * parse the ndjson file
+     * @override
      * @param {String} filename
      * @returns {Array} the parsed data
      */

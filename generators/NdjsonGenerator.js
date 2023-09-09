@@ -38,6 +38,7 @@ class NdjsonGenerator extends AbstractGenerator {
 
     /**
      * save the output data to the ndjson file
+     * @override
      * @param {String} originalTemplatePath
      * @param {Object[]} output
      */

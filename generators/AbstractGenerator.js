@@ -97,7 +97,6 @@ class AbstractGenerator {
 
     /**
      * the main function of the generator
-     * @abstract
      */
     run() {
         this.initializeDatabase(this.database, this.templateConfig.source);

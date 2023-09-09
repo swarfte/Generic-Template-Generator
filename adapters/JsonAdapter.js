@@ -13,10 +13,10 @@ class JsonAdapter extends AbstractAdapter {
     }
 
     /**
-     *
+     * it will parse the json file
+     * @override
      * @param {String} filename
      * @returns {Array} the parsed data
-     * @override
      */
     transformDate(filename) {
         const fileData = fs.readFileSync(filename, "utf8");
