@@ -1,10 +1,4 @@
-const {
-    csvAdapter,
-    xlsxAdapter,
-    xmlAdapter,
-    jsonAdapter,
-    ndjsonAdapter,
-} = require("../tool/adapters.js");
+const { getAdapter } = require("../adapters/AdapterList.js");
 
 /**
  * the abstract class of generator
@@ -18,15 +12,6 @@ class AbstractGenerator {
                 "Abstract class 'AbstractGenerator' cannot be instantiated directly."
             );
         }
-
-        this.AdaptersList = {
-            csv: csvAdapter,
-            xlsx: xlsxAdapter,
-            xml: xmlAdapter,
-            json: jsonAdapter,
-            ndjson: ndjsonAdapter,
-        };
-
         this.originalTemplatePath = templateName; // the original template path
         this.templatePath = "../template/" + this.originalTemplatePath + ".js"; // the full path of the template
         this.template = require(this.templatePath)["Template"]; // it is a template class , it is used to generate the data
@@ -58,7 +43,7 @@ class AbstractGenerator {
             let filenameExtension = this.getFilenameExtension(value);
 
             // static import the adapter
-            const adapter = this.AdaptersList[filenameExtension];
+            const adapter = getAdapter(filenameExtension);
             database[key] = new adapter(value);
         }
     }
