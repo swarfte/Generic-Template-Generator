@@ -1,5 +1,5 @@
 /**
- * @fileoverview the abstract class of adapter
+ * the abstract class of adapter
  * @abstract
  * @class
  * @package
@@ -17,8 +17,12 @@ class AbstractAdapter {
     /**
      * transform the data to json format
      * @param {String} fileName
+     * @abstract
      */
-    transformDate(fileName) {}
+    transformDate(fileName) {
+        console.log(`fileName: ${fileName}`);
+        throw new Error("You have to implement the method transformDate!");
+    }
 
     /**
      *  get the parsed data

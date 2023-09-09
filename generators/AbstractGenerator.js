@@ -89,7 +89,11 @@ class AbstractGenerator {
      * @abstract
      * @memberof AbstractGenerator
      */
-    saveOutput(originalTemplatePath, output) {}
+    saveOutput(originalTemplatePath, output) {
+        console.log(`originalTemplatePath: ${originalTemplatePath}`);
+        console.log(`output: ${output}`);
+        throw new Error("You have to implement the method saveOutput!");
+    }
 
     /**
      * the main function of the generator

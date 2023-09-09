@@ -1,6 +1,7 @@
 const fs = require("fs");
 
 const { getGenerator } = require("./generators/GeneratorList");
+const process = require("process");
 
 /**
  * the abstract class for the adapter
