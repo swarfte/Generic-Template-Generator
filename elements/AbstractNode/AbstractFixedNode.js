@@ -1,4 +1,4 @@
-const { AbstractNode } = require("../AbstractNode");
+const { AbstractNode } = require("./AbstractNode");
 /**
  * @abstract
  * @class AbstractFixedNode

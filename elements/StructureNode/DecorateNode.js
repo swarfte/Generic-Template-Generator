@@ -1,4 +1,6 @@
-const { AbstractStructureNode } = require("./AbstractStructureNode");
+const {
+    AbstractStructureNode,
+} = require("../AbstractNode/AbstractStructureNode");
 
 /**
  * @class DecorateNode
