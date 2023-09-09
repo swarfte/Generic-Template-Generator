@@ -6,14 +6,14 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "server-run": "node --max-old-space-size=32768 main.js",
-        "client-run": "node --max-old-space-size=10240 main.js"
+        "client-run": "node --max-old-space-size=8192 main.js"
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/swarfte/Generic-Template-Generator.git"
     },
     "author": "Swarfte",
-    "license": "ISC",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/swarfte/Generic-Template-Generator/issues"
     },
