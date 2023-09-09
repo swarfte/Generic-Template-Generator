@@ -4,6 +4,10 @@ const ndjson = require("ndjson");
 const XLSX = require("xlsx");
 const xml2js = require("xml2js");
 
+/**
+ * @fileoverview the abstract class of adapter
+ * @package
+ */
 class AbstractAdapter {
     // the abstract adapter for different file type
     constructor(filename) {
@@ -14,20 +18,35 @@ class AbstractAdapter {
         this.data = []; // the parsed data for the file
     }
 
-    transformDate() {
-        //  transform data to json format
-    }
+    /**
+     * transform the data to json format
+     * @param {String} fileName
+     */
+    transformDate(fileName) {}
 
+    /**
+     *  get the parsed data
+     * @returns {Array} the parsed data
+     */
     getData() {
         // get the data
         return this.data;
     }
 
+    /**
+     *  set the parsed data
+     * @param {Array} data
+     */
     setData(data) {
         // set the data
         this.data = data;
     }
 
+    /**
+     * get the column data by column name
+     * @param {String} columnName
+     * @returns {Array} the column data
+     */
     getColumnData(columnName) {
         let column = [];
         for (const element of this.data) {
@@ -35,19 +54,30 @@ class AbstractAdapter {
         }
         return column;
     }
-
+    /**
+     *  get the row data by index
+     * @param {Number} rowIndex
+     * @returns
+     */
     getRowData(rowIndex) {
         return this.data[rowIndex];
     }
 }
 
+/**
+ * @fileoverview the adapter for csv file type
+ * @package
+ */
 class csvAdapter extends AbstractAdapter {
-    // parse csv file
     constructor(filename) {
         super(filename);
         this.data = this.transformDate(this.fileName);
     }
-
+    /**
+     * transform the data to json format
+     * @param {String} filename
+     * @returns {Array} the parsed data
+     */
     transformDate(filename) {
         const results = [];
         const fileData = fs.readFileSync(filename, "utf8");
@@ -58,6 +88,10 @@ class csvAdapter extends AbstractAdapter {
     }
 }
 
+/**
+ * @fileoverview the adapter for ndjson file type
+ * @package
+ */
 class ndjsonAdapter extends AbstractAdapter {
     // parse ndjson file
     constructor(filename) {
@@ -65,6 +99,11 @@ class ndjsonAdapter extends AbstractAdapter {
         this.data = this.transformDate(this.fileName);
     }
 
+    /**
+     *
+     * @param {String} filename
+     * @returns {Array} the parsed data
+     */
     transformDate(filename) {
         const results = [];
         const fileData = fs.readFileSync(filename, "utf8");
@@ -75,25 +114,42 @@ class ndjsonAdapter extends AbstractAdapter {
     }
 }
 
+/**
+ * @fileoverview the adapter for json file type
+ * @package
+ */
 class jsonAdapter extends AbstractAdapter {
-    // parse json file
     constructor(filename) {
         super(filename);
         this.data = this.transformDate(this.fileName);
     }
 
+    /**
+     *
+     * @param {String} filename
+     * @returns {Array} the parsed data
+     */
     transformDate(filename) {
         const fileData = fs.readFileSync(filename, "utf8");
         return JSON.parse(fileData);
     }
 }
 
+/**
+ * @fileoverview the adapter for xlsx file type
+ * @package
+ */
 class xlsxAdapter extends AbstractAdapter {
     constructor(filename) {
         super(filename);
         this.data = this.transformDate(this.fileName);
     }
 
+    /**
+     *
+     * @param {String} filename
+     * @returns {Array} the parsed data
+     */
     transformDate(filename) {
         const workbook = XLSX.readFile(filename);
         const sheet_name_list = workbook.SheetNames;
@@ -104,12 +160,21 @@ class xlsxAdapter extends AbstractAdapter {
     }
 }
 
+/**
+ * @fileoverview the adapter for xml file type
+ * @package
+ */
 class xmlAdapter extends AbstractAdapter {
     constructor(filename) {
         super(filename);
         this.data = this.transformDate(this.fileName);
     }
 
+    /**
+     *
+     * @param {String} filename
+     * @returns {Array} the parsed data
+     */
     transformDate(filename) {
         // return a array of object
         const data = fs.readFileSync(filename, "utf8");

@@ -1,29 +1,6 @@
 const fs = require("fs");
-const {
-    jsonGenerator,
-    ndjsonGenerator,
-    csvGenerator,
-    xlsxGenerator,
-    xmlGenerator,
-} = require("./tool/generator.js");
 
-function getGenerator(generatorName) {
-    // used for getting the generator
-    switch (generatorName) {
-        case "json":
-            return jsonGenerator;
-        case "ndjson":
-            return ndjsonGenerator;
-        case "csv":
-            return csvGenerator;
-        case "xlsx":
-            return xlsxGenerator;
-        case "xml":
-            return xmlGenerator;
-        default:
-            throw new Error("Invalid generator name.");
-    }
-}
+const { getGenerator } = require("./generators/GeneratorList");
 
 function generateTemplate() {
     // used for generating a template
