@@ -7,7 +7,7 @@ const { AbstractFixedNode } = require("../AbstractNode/AbstractFixedNode.js");
  */
 class DateNode extends AbstractFixedNode {
     /**
-     * @param {Date} data
+     * @param {any} data
      */
     constructor(data) {
         super(data);

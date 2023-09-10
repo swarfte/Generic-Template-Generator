@@ -2,6 +2,9 @@ const {
     StringNode,
     DecorateNode,
     BasicNode,
+    RandomIntNode,
+    RandomFloatNode,
+    NumberNode,
 } = require("../elements/NodeList.js");
 
 const { AbstractTemplate } = require("../templateEngine/AbstractTemplate.js");
@@ -14,6 +17,7 @@ class Template extends AbstractTemplate {
         },
         primaryTable: "book",
     };
+
     constructor() {
         super();
         this.resourceType = new StringNode("Book");
@@ -28,6 +32,14 @@ class Template extends AbstractTemplate {
             new BasicNode("book", "year"),
             (year) => (2023 - year).toString()
         );
+        this.score = new DecorateNode(
+            new RandomFloatNode(
+                new RandomIntNode(new NumberNode(10), new NumberNode(45)),
+                new RandomIntNode(45, 100)
+            ),
+            (score) => score.toFixed(1)
+        );
+        this.numberOfViews = new StringNode(new RandomIntNode(0, 10000));
     }
 }
 

@@ -8,7 +8,7 @@ const { AbstractFixedNode } = require("../AbstractNode/AbstractFixedNode.js");
 class NumberNode extends AbstractFixedNode {
     /**
      *
-     * @param {Number} data
+     * @param {any} data
      */
     constructor(data) {
         super(data);

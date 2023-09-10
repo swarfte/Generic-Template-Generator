@@ -18,6 +18,14 @@ class AbstractNode {
     getData() {
         return this.data;
     }
+
+    /**
+     *  set the data of the node
+     * @param {any} data
+     */
+    setData(data) {
+        this.data = data;
+    }
     /**
      * the main function of the node , it is used to parse the data according to the node
      * @param {String} key - the attribute name of the template

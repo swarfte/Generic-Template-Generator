@@ -1,5 +1,4 @@
 const { AbstractFixedNode } = require("../AbstractNode/AbstractFixedNode.js");
-
 /**
  * @class UndefinedNode
  * @description the node for undefined
@@ -8,7 +7,7 @@ const { AbstractFixedNode } = require("../AbstractNode/AbstractFixedNode.js");
 class UndefinedNode extends AbstractFixedNode {
     /**
      *
-     * @param {undefined} data
+     * @param {any} data
      */
     constructor(data) {
         super(data);

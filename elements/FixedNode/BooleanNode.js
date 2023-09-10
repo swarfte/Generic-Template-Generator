@@ -8,7 +8,7 @@ const { AbstractFixedNode } = require("../AbstractNode/AbstractFixedNode.js");
 class BooleanNode extends AbstractFixedNode {
     /**
      *
-     * @param {boolean} data
+     * @param {any} data
      */
     constructor(data) {
         super(data);

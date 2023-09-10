@@ -15,15 +15,15 @@
 > -   set the config in templateConfig ( reference to the template.js)
 > -   use the node to construct the template according to your customer need
 
-### run
+### run with lower ram
 
-> -   node main.js {your Template name} {output file extension}
-> -   e.g. node main.js Location json
+> -   npm run client-run {your Template name} {output file extension}
+> -   e.g. npm run client-run Book json
 
 ### run for big file
 
-> -   node --max-old-space-size=8192 main.js {your Template name} {output file extension}
-> -   e.g. node --max-old-space-size=8192 main.js Location json
+> -   npm run server-run {your Template name} {output file extension}
+> -   e.g. npm run server-run Book json
 
 ### merge partion file
 

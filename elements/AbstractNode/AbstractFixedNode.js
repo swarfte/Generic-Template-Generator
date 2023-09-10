@@ -6,6 +6,10 @@ const { AbstractNode } = require("./AbstractNode.js");
  * @extends {AbstractNode}
  */
 class AbstractFixedNode extends AbstractNode {
+    /**
+     *
+     * @param {any | AbstractNode} data
+     */
     constructor(data) {
         super(data);
         if (this.constructor === AbstractFixedNode) {
@@ -25,6 +29,17 @@ class AbstractFixedNode extends AbstractNode {
     parseNode(key, value, record, database) {
         super.parseNode(key, value, record, database);
         return this.getData();
+    }
+
+    /**
+     *  get the data of the node , if the data is a node , it will parse the node
+     * @returns {any} the data of the node
+     */
+    getData() {
+        while (this.data instanceof AbstractNode) {
+            this.data = this.data.parseNode("fixed", this.data, {}, {});
+        }
+        return this.data;
     }
 }
 

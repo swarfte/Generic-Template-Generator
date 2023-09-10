@@ -1,4 +1,5 @@
 const { AbstractFixedNode } = require("../AbstractNode/AbstractFixedNode");
+const { AbstractNode } = require("../AbstractNode/AbstractNode");
 
 /**
  * @class RandomFloatNode
@@ -8,12 +9,27 @@ const { AbstractFixedNode } = require("../AbstractNode/AbstractFixedNode");
 class RandomFloatNode extends AbstractFixedNode {
     /**
      * @override
-     * @param {Number} min
-     * @param {Number} max
+     * @param {Number | AbstractNode} min
+     * @param {Number | AbstractNode} max
      */
     constructor(min, max) {
         super([min, max]);
-        this.data = Math.random() * (max - min) + min;
+        let tempMin = min;
+        let tempMax = max;
+
+        if (tempMin instanceof AbstractNode) {
+            tempMin = tempMin.parseNode("fixed", tempMin, {}, {});
+        }
+        if (tempMax instanceof AbstractNode) {
+            tempMax = tempMax.parseNode("fixed", tempMax, {}, {});
+        }
+        tempMin = Number(tempMin);
+        tempMax = Number(tempMax);
+
+        if (typeof tempMin !== "number" || typeof tempMax !== "number") {
+            throw new Error("RandomFloatNode: the min and max must be number");
+        }
+        this.data = Math.random() * (tempMax - tempMin) + tempMin;
     }
 
     /**

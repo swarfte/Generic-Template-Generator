@@ -14,6 +14,8 @@ const { OneToManyNode } = require("./DynamicNode/OneToManyNode.js");
 const { MultipleSearchNode } = require("./DynamicNode/MultipleSearchNode.js");
 const { SingleSearchNode } = require("./DynamicNode/SingleSearchNode.js");
 const { BasicNode } = require("./DynamicNode/BasicNode.js");
+const { RandomIntNode } = require("./FixedNode/RandomIntNode.js");
+const { RandomFloatNode } = require("./FixedNode/RandomFloatNode.js");
 
 const nodeList = {
     BooleanNode,
@@ -32,6 +34,8 @@ const nodeList = {
     MultipleSearchNode,
     SingleSearchNode,
     BasicNode,
+    RandomIntNode,
+    RandomFloatNode,
 };
 
 module.exports = nodeList;
