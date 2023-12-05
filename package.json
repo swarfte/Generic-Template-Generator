@@ -1,26 +1,33 @@
 {
-    "name": "Generic-Template-Generator",
-    "version": "1.0.0",
-    "description": "transform the MIMIC-IV dataset to FHIR format",
-    "main": "main.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/swarfte/Generic-Template-Generator.git"
-    },
-    "author": "Swarfte",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/swarfte/Generic-Template-Generator/issues"
-    },
-    "homepage": "https://github.com/swarfte/Generic-Template-Generator/blob/main/README.md",
-    "dependencies": {
-        "csv-parser": "^3.0.0",
-        "fs": "^0.0.1-security",
-        "ndjson": "^2.0.0",
-        "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz",
-        "xml2js": "^0.6.0"
-    }
+  "name": "Generic-Template-Generator",
+  "version": "1.0.0",
+  "description": "transform the MIMIC-IV dataset to FHIR format",
+  "main": "/build/main.js",
+  "scripts": {
+    "start": "tsc & node ./build/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swarfte/Generic-Template-Generator.git"
+  },
+  "author": "Swarfte",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swarfte/Generic-Template-Generator/issues"
+  },
+  "homepage": "https://github.com/swarfte/Generic-Template-Generator/blob/ts-version/README.md",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "fs": "^0.0.1-security",
+    "ndjson": "^2.0.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz",
+    "xml2js": "^0.6.0"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@types/ndjson": "^2.0.4",
+    "@types/node": "^20.10.3",
+    "@types/xlsx": "^0.0.36",
+    "@types/xml2js": "^0.4.14"
+  }
 }
